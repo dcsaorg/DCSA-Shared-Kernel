@@ -99,8 +99,7 @@ public class PartyServiceImpl implements PartyService {
       .map(
         this::partyIdentifyingCodeToIdentifyingCode
       )
-      .collectList()
-      .switchIfEmpty(Mono.just(Collections.emptyList()));
+      .collectList();
 
     return Mono.zip(addressMono,sartIdentifyingCodes)
       .map(tuple -> party.toPartyTO(
