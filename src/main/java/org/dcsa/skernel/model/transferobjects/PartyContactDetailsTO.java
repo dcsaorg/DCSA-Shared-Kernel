@@ -12,6 +12,7 @@ public class PartyContactDetailsTO {
   private String name;
   private String phone;
   private String email;
+  private String url;
 
   /**
    * Use a mapper instead
@@ -22,6 +23,7 @@ public class PartyContactDetailsTO {
     partyContactDetails.setName(this.getName());
     partyContactDetails.setEmail(this.getEmail());
     partyContactDetails.setPhone(this.getPhone());
+    partyContactDetails.setUrl(this.getUrl());
     partyContactDetails.setPartyID(partyID);
     return partyContactDetails;
   }
