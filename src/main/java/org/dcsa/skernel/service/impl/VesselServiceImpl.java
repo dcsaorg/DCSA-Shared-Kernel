@@ -62,6 +62,7 @@ public class VesselServiceImpl extends QueryServiceImpl<VesselRepository, Vessel
 
     @Override
     public Mono<Vessel> findById(final UUID vesselID) {
+        if (vesselID == null) return Mono.empty();
         ExtendedRequest<Vessel> extendedRequest = newExtendedRequest();
         extendedRequest.parseParameter(Map.of("id", List.of(String.valueOf(vesselID))));
         return findSingle(extendedRequest, "vesselID", vesselID);
