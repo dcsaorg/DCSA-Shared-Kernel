@@ -177,7 +177,7 @@ class LocationServiceImplTest {
     when(unLocationRepository.findById((String) any())).thenReturn(Mono.empty());
 
     StepVerifier.create(locationService.createLocationByTO(locationTO, x -> doNothingCallback))
-      .expectErrorMessage("UnLocation with unLocationCode xxxxx not part of reference implementation data set")
+      .expectErrorMessage("UNLocation with UNLocationCode xxxxx not part of reference implementation data set")
       .verify();
   }
 
@@ -187,7 +187,7 @@ class LocationServiceImplTest {
     when(unLocationRepository.findById((String) any())).thenReturn(Mono.empty());
 
     StepVerifier.create(locationService.ensureResolvable(locationTO))
-      .expectErrorMessage("UnLocation with unLocationCode xxxxx not part of reference implementation data set")
+      .expectErrorMessage("UNLocation with UNLocationCode xxxxx not part of reference implementation data set")
       .verify();
   }
 

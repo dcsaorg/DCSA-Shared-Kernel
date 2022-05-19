@@ -196,11 +196,13 @@ public class LocationServiceImpl implements LocationService {
   }
 
   private Mono<LocationTO> ensureUnLocationResolvable(LocationTO locationTO) {
-    return Mono.justOrEmpty(locationTO.getUnLocationCode())
-      .flatMap(unLocationRepository::findById)
-      .switchIfEmpty(Mono.error(ConcreteRequestErrorMessageException.invalidParameter(
-        "UnLocation with unLocationCode "
-          + locationTO.getUnLocationCode() + " not part of reference implementation data set")))
-      .thenReturn(locationTO);
+    if (locationTO.getUnLocationCode() != null) {
+      return unLocationRepository.findById(locationTO.getUnLocationCode())
+        .switchIfEmpty(Mono.error(ConcreteRequestErrorMessageException.invalidParameter(
+          "UNLocation with UNLocationCode "
+            + locationTO.getUnLocationCode() + " not part of reference implementation data set")))
+        .thenReturn(locationTO);
+    }
+    return Mono.just(locationTO);
   }
 }
