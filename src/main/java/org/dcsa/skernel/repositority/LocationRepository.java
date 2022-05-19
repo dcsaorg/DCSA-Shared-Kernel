@@ -12,13 +12,6 @@ import java.util.UUID;
 
 public interface LocationRepository extends ReactiveCrudRepository<Location, String> {
 
-  @Query("SELECT location.*"
-    + "  FROM location"
-    + "  JOIN shipping_instruction ON (location.id=shipping_instruction.invoice_payable_at)"
-    + " WHERE shipping_instruction.id = :shippingInstructionReference"
-  )
-  Mono<Location> findPaymentLocationByShippingInstructionReference(String shippingInstructionReference);
-
   Mono<Location> findByAddressIDAndFacilityIDAndLocationNameAndLatitudeAndLongitudeAndUnLocationCode(
     UUID addressID,
     UUID facilityID,
