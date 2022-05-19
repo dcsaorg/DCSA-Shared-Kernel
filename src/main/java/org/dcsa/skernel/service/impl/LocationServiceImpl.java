@@ -32,13 +32,6 @@ public class LocationServiceImpl implements LocationService {
 
   private final LocationMapper locationMapper;
 
-
-  public Mono<LocationTO> findPaymentLocationByShippingInstructionReference(String shippingInstructionReference) {
-    return locationRepository
-      .findPaymentLocationByShippingInstructionReference(shippingInstructionReference)
-      .flatMap(this::getLocationTO);
-  }
-
   @Override
   public Mono<LocationTO> ensureResolvable(LocationTO locationTO) {
     Mono<LocationTO> locationTOMono = ensureUnLocationResolvable(locationTO);
