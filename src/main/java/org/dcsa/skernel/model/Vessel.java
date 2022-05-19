@@ -49,8 +49,8 @@ public class Vessel {
     private String vesselFlag;
 
     @Size(max = 10)
-    @Column("vessel_call_sign_number")
-    private String vesselCallSignNumber;
+    @Column("vessel_call_sign")
+    private String vesselCallSign;
 
     @Column("vessel_operator_carrier_id")
     @JsonIgnore
