@@ -28,7 +28,7 @@ public class PartyContactDetailsServiceImpl implements PartyContactDetailsServic
   public Mono<PartyContactDetailsTO> ensureResolvable(
       PartyContactDetailsTO partyContactDetailsTO, String partyId) {
     PartyContactDetails partyContactDetails =
-        partyContactDetailsMapper.dtoToPartyContactDetails(partyContactDetailsTO);
+        partyContactDetailsMapper.dtoToPartyContactDetails(partyContactDetailsTO, partyId);
     return partyContactDetailsRepository
         .findByContent(partyContactDetails)
         .switchIfEmpty(Mono.defer(() -> saveNewPartyContactDetails(partyContactDetails, partyId)))
