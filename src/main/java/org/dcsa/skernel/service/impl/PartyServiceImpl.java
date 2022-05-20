@@ -166,14 +166,13 @@ public class PartyServiceImpl implements PartyService {
             .flatMapMany(partyContactDetailsService::findTOByPartyID)
             .collectList();
 
-    return Mono.just(party)
-        .map(partyMapper::partyToDTO)
+    return Mono.just(partyMapper.partyToDTO(party))
         .flatMap(
             partyTO ->
                 Mono.when(
                         addressMono.doOnNext(partyTO::setAddress),
                         sartIdentifyingCodes
-                            .map(this::findNmftaCode)
+                            .flatMap(this::findNmftaCode)
                             .doOnNext(partyTO::setNmftaCode),
                         partyContactDetailsMono.doOnNext(partyTO::setPartyContactDetails))
                     .thenReturn(partyTO));
@@ -190,18 +189,16 @@ public class PartyServiceImpl implements PartyService {
         .build();
   }
 
-  private String findNmftaCode(List<PartyTO.IdentifyingCode> identifyingCodes) {
+  private Mono<String> findNmftaCode(List<PartyTO.IdentifyingCode> identifyingCodes) {
     if (null == identifyingCodes || identifyingCodes.isEmpty()) {
-      return null;
+      return Mono.empty();
     }
-
-    for (PartyTO.IdentifyingCode idc : identifyingCodes) {
-      if (DCSAResponsibleAgencyCode.SCAC
-          .getLegacyAgencyCode()
-          .equals(idc.getCodeListResponsibleAgencyCode())) {
-        return idc.getPartyCode();
-      }
-    }
-    return null;
+    return Mono.justOrEmpty(identifyingCodes.stream()
+      .filter(idc ->
+        DCSAResponsibleAgencyCode.SCAC.getLegacyAgencyCode().equals(idc.getCodeListResponsibleAgencyCode())
+          || DCSAResponsibleAgencyCode.SCAC == idc.getDcsaResponsibleAgencyCode()
+      )
+      .map(PartyTO.IdentifyingCode::getPartyCode)
+      .findFirst().orElse(null));
   }
 }
