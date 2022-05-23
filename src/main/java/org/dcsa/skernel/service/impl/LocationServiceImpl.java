@@ -36,17 +36,6 @@ public class LocationServiceImpl implements LocationService {
   public Mono<LocationTO> ensureResolvable(LocationTO locationTO) {
     Mono<LocationTO> locationTOMono = ensureUnLocationResolvable(locationTO);
 
-    Address address = locationTO.getAddress();
-    if (address != null) {
-      locationTOMono =
-        locationTOMono
-          .flatMap(loc ->
-            addressService
-              .ensureResolvable(address)
-              .doOnNext(locationTO::setAddress)
-              .thenReturn(locationTO)
-          );
-    }
     if (locationTO.getFacilityCode() != null) {
       locationTOMono =
         locationTOMono
@@ -57,10 +46,14 @@ public class LocationServiceImpl implements LocationService {
                 loc.getFacilityCodeListProvider(),
                 loc.getFacilityCode()))
           .doOnNext(locationTO::setFacility)
+          .doOnNext(facility -> locationTO.setFacilityID(facility.getFacilityID()))
           .thenReturn(locationTO);
     }
 
-    return locationTOMono
+    return Mono.justOrEmpty(locationTO.getAddress())
+      .flatMap(addressService::ensureResolvable)
+      .doOnNext(locationTO::setAddress)
+      .then(locationTOMono)
       .flatMap(locationRepository::findByContent)
       .switchIfEmpty(
         Mono.defer(() -> locationRepository.save(locationMapper.dtoToLocation(locationTO))))
