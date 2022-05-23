@@ -185,6 +185,7 @@ class LocationServiceImplTest {
   @DisplayName("Test trying to ensure location is resolvable with unknown UnLocation")
   void testEnsureResolvableWithUnknownUnLocation() {
     when(unLocationRepository.findById((String) any())).thenReturn(Mono.empty());
+    when(addressService.ensureResolvable(address)).thenReturn(Mono.just(address));
 
     StepVerifier.create(locationService.ensureResolvable(locationTO))
       .expectErrorMessage("UNLocation with UNLocationCode xxxxx not part of reference implementation data set")

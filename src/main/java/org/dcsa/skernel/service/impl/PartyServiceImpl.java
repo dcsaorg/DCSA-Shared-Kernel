@@ -68,8 +68,8 @@ public class PartyServiceImpl implements PartyService {
         .flatMap(
             party ->
                 Mono.when(
-                        addressService
-                            .ensureResolvable(partyTO.getAddress())
+                        Mono.justOrEmpty(partyTO.getAddress())
+                            .flatMap(addressService::ensureResolvable)
                             .doOnNext(partyTO::setAddress),
                         ensureResolvablePartyContactDetailsForParty(
                                 partyTO.getPartyContactDetails(), party.getId())
