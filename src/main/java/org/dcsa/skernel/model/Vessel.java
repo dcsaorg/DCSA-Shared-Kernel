@@ -32,6 +32,7 @@ public class Vessel {
     }
 
     @Id
+    @JsonIgnore
     @Column("id")
     private UUID id;
 
