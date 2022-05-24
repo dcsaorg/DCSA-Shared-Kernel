@@ -29,7 +29,6 @@ public class PartyServiceImpl implements PartyService {
   private final PartyIdentifyingCodeRepository partyCodeListResponsibleAgencyRepository;
   private final PartyContactDetailsService partyContactDetailsService;
   private final PartyMapper partyMapper;
-  private static final Address EMPTY_ADDRESS = new Address();
 
   @Override
   public Mono<PartyTO> createPartyByTO(PartyTO partyTO) {
@@ -119,11 +118,12 @@ public class PartyServiceImpl implements PartyService {
   }
 
   private Mono<PartyTO> loadRelatedEntities(Party party) {
-
+    assert party.getId() != null : "Loading a party that has not been stored in the DB!?";
+    // We leave the address without a default (i.e., no .switchIfEmpty) as otherwise we end
+    // up with "address: { <all-null-fields> }" instead of "address: null".
     Mono<Address> addressMono =
         Mono.justOrEmpty(party.getAddressID())
-            .flatMap(addressService::findById)
-            .switchIfEmpty(Mono.just(EMPTY_ADDRESS));
+            .flatMap(addressService::findById);
 
     Mono<List<PartyTO.IdentifyingCode>> sartIdentifyingCodes =
         partyCodeListResponsibleAgencyRepository
@@ -132,8 +132,7 @@ public class PartyServiceImpl implements PartyService {
             .collectList();
 
     Mono<List<PartyContactDetailsTO>> partyContactDetailsMono =
-        Mono.justOrEmpty(party.getId())
-            .flatMapMany(partyContactDetailsService::findTOByPartyID)
+      partyContactDetailsService.findTOByPartyID(party.getId())
             .collectList();
 
     return Mono.just(partyMapper.partyToDTO(party))
