@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.dcsa.core.util.MappingUtils;
 import org.dcsa.skernel.model.base.AbstractParty;
 import org.dcsa.skernel.model.transferobjects.PartyTO;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -17,8 +19,15 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class Party extends AbstractParty {
+public class Party extends AbstractParty implements Persistable<String> {
 
   @Column("address_id")
   private UUID addressID;
+
+  @Transient
+  private boolean isNew;
+
+  public boolean isNew() {
+    return isNew || getId() == null;
+  }
 }

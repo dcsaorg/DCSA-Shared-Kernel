@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.BiFunction;
 
 @RequiredArgsConstructor
@@ -32,8 +33,13 @@ public class PartyServiceImpl implements PartyService {
 
   @Override
   public Mono<PartyTO> createPartyByTO(PartyTO partyTO) {
-    return partyRepository
-        .save(partyMapper.dtoToParty(partyTO))
+    Party p = partyMapper.dtoToParty(partyTO);
+    if (p.getId() == null) {
+      // Work around for DDT-1013
+      p.setId(String.valueOf(UUID.randomUUID()));
+      p.setNew(true);
+    }
+    return partyRepository.save(p)
         .flatMap(
             party ->
                 Mono.when(
