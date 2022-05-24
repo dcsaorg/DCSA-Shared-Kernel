@@ -32,36 +32,6 @@ public class PartyServiceImpl implements PartyService {
   private static final Address EMPTY_ADDRESS = new Address();
 
   @Override
-  public Mono<PartyTO> ensureResolvable(PartyTO partyTO) {
-    Address address = partyTO.getAddress();
-    Mono<PartyTO> partyTOMono;
-    if (address != null) {
-      partyTOMono =
-          addressService
-              .ensureResolvable(address)
-              .doOnNext(partyTO::setAddress)
-              .thenReturn(partyTO);
-    } else {
-      partyTOMono = Mono.just(partyTO);
-    }
-
-    return partyTOMono
-        .flatMap(pTo -> partyRepository.save(partyMapper.dtoToParty(pTo)))
-        .flatMap(
-            party ->
-                Mono.justOrEmpty(partyTO.getIdentifyingCodes())
-                    .flatMapMany(Flux::fromIterable)
-                    .map(idc -> mapIdcCodeToPartyIdc.apply(party.getId(), idc))
-                    .flatMap(partyCodeListResponsibleAgencyRepository::save)
-                    .then()
-                    .thenReturn(party))
-        .map(
-            party ->
-                party.toPartyTO(
-                    partyTO.getNmftaCode(), partyTO.getAddress(), partyTO.getIdentifyingCodes()));
-  }
-
-  @Override
   public Mono<PartyTO> createPartyByTO(PartyTO partyTO) {
     return partyRepository
         .save(partyMapper.dtoToParty(partyTO))
