@@ -147,6 +147,7 @@ public class PartyServiceImpl implements PartyService {
                 Mono.when(
                         addressMono.doOnNext(partyTO::setAddress),
                         sartIdentifyingCodes
+                            .doOnNext(partyTO::setIdentifyingCodes)
                             .flatMap(this::findNmftaCode)
                             .doOnNext(partyTO::setNmftaCode),
                         partyContactDetailsMono.doOnNext(partyTO::setPartyContactDetails))
