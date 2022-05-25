@@ -1,4 +1,4 @@
-package org.dcsa.skernel.model.enums;
+package org.dcsa.skernel.entity.enums;
 
 public enum FacilityTypeCode {
   BOCR,
