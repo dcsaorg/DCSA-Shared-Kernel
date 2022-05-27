@@ -1,4 +1,4 @@
-package org.dcsa.skernel.entity.enums;
+package org.dcsa.skernel.persistence.entity.enums;
 
 public enum FacilityCodeListProvider {
   SMDG,
