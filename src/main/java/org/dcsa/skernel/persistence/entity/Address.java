@@ -1,15 +1,27 @@
-package org.dcsa.skernel.entity;
+package org.dcsa.skernel.persistence.entity;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter(AccessLevel.PRIVATE)
 @Entity
 @Table(name = "address")
 public class Address {
-
   @Id
   @GeneratedValue
   @Column(name = "id", nullable = false)
@@ -24,7 +36,7 @@ public class Address {
   @Column(name = "street_number", length = 50)
   private String streetNumber;
 
-  @Column(name = "floor", length =  50)
+  @Column(name = "floor", length = 50)
   private String floor;
 
   @Column(name = "postal_code", length = 10)
@@ -33,9 +45,9 @@ public class Address {
   @Column(name = "city", length = 65)
   private String city;
 
-  @Column(name = "state_region", length = 75)
+  @Column(name = "state_region", length = 65)
   private String stateRegion;
 
-  @Column(name = "country", length = 75)
+  @Column(name = "country", length = 65)
   private String country;
 }
