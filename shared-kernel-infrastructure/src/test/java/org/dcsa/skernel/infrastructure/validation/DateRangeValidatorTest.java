@@ -1,4 +1,4 @@
-package org.dcsa.skernel.validator;
+package org.dcsa.skernel.infrastructure.validation;
 
 import lombok.Data;
 import org.junit.jupiter.api.Assertions;

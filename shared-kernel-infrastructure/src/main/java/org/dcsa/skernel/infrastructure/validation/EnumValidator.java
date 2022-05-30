@@ -1,4 +1,4 @@
-package org.dcsa.skernel.validator;
+package org.dcsa.skernel.infrastructure.validation;
 
 import org.apache.commons.lang3.EnumUtils;
 

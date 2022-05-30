@@ -1,6 +1,6 @@
-package org.dcsa.skernel.validator;
+package org.dcsa.skernel.infrastructure.validation;
 
-import org.dcsa.skernel.util.ReflectUtility;
+import org.dcsa.skernel.infrastructure.util.ReflectUtility;
 
 import javax.el.MethodNotFoundException;
 import javax.validation.ConstraintValidator;
