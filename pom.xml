@@ -9,16 +9,14 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<artifactId>shared_kernel</artifactId>
+	<groupId>org.dcsa.shared-kernel</groupId>
+	<artifactId>dcsa-shared-kernel-parent</artifactId>
 	<version>${revision}${sha1}${changelist}</version>
-	<packaging>jar</packaging>
-	<name>DCSA-Shared-Kernel</name>
+	<packaging>pom</packaging>
+	<name>DCSA-Shared-Kernel (Parent)</name>
 	<description>Shared Kernel of entities for DCSA APIs</description>
 
 	<properties>
-		<dcsa.version>0.8.34</dcsa.version>
-		<dcsa.core.tag/>
-		<dcsa.artifacttype>-SNAPSHOT</dcsa.artifacttype>
 		<revision>0.1.0</revision>
 		<sha1/>
 		<changelist>-SNAPSHOT</changelist>
@@ -30,22 +28,6 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
@@ -55,17 +37,39 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
+
+	<modules>
+		<module>shared-kernel-domain</module>
+		<module>shared-kernel-errors</module>
+		<module>shared-kernel-infrastructure</module>
+		<module>shared-kernel-all</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.dcsa.shared-kernel</groupId>
+				<artifactId>dcsa-shared-kernel-domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.shared-kernel</groupId>
+				<artifactId>dcsa-shared-kernel-errors</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.shared-kernel</groupId>
+				<artifactId>dcsa-shared-kernel-infrastructure</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.shared-kernel</groupId>
+				<artifactId>dcsa-shared-kernel-all</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<repositories>
 		<repository>
