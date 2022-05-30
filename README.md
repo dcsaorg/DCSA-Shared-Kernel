@@ -67,31 +67,15 @@ After that you can depend on modules independently:
   <dependencies>
     <dependency>
       <groupId>org.dcsa.shared-kernel</groupId>
-      <artifactId>dcsa-shared-kernel-pagination</artifactId>
+      <artifactId>dcsa-shared-kernel-domain</artifactId>
     </dependency>
     <dependency>
       <groupId>org.dcsa.shared-kernel</groupId>
-      <artifactId>dcsa-shared-kernel-persistence</artifactId>
+      <artifactId>dcsa-shared-kernel-errors</artifactId>
     </dependency>
     <dependency>
       <groupId>org.dcsa.shared-kernel</groupId>
-      <artifactId>dcsa-shared-kernel-validation</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.dcsa.shared-kernel</groupId>
-      <artifactId>dcsa-shared-kernel-http-headers</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.dcsa.shared-kernel</groupId>
-      <artifactId>dcsa-shared-kernel-errors-transfer-obj</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.dcsa.shared-kernel</groupId>
-      <artifactId>dcsa-shared-kernel-errors-exceptions</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.dcsa.shared-kernel</groupId>
-      <artifactId>dcsa-shared-kernel-errors-infrastructure</artifactId>
+      <artifactId>dcsa-shared-kernel-infrastructure</artifactId>
     </dependency>
   </dependencies>
 ```
