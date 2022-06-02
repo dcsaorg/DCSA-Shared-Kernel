@@ -10,7 +10,6 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,9 +24,8 @@ import javax.persistence.Table;
 @Table(name = "location")
 public class Location {
   @Id
-  @GeneratedValue
   @Column(name = "id", nullable = false, length = 100)
-  private String id; // Really a UUID
+  private String id;
 
   @Column(name = "location_name", length = 100)
   private String name;
