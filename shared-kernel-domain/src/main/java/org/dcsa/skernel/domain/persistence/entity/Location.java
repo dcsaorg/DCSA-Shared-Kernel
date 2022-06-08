@@ -36,7 +36,7 @@ public class Location {
   @Column(name = "longitude", length = 11)
   private String longitude;
 
-  @Column(name = "un_location_code", length = 5)
+  @Column(name = "un_location_code", length = 5, columnDefinition = "bpchar") // "bpchar" here is not a typing error
   private String unLocationCode; /* REFERENCES dcsa_im_v3_0.un_location (un_location_code) */
 
   @ManyToOne(fetch = FetchType.LAZY)
