@@ -24,7 +24,7 @@ public class DCSAQueryParameterParser {
    *
    *     @GetMapping
    *     public List<Event> getEvents(@RequestParam Map<String, String> queryParams) {
-   *         List<ParsedQueryParameter<ZonedDateTime> parsedQueryParams = queryParameterParser.parseCustomQueryParameter(
+   *         List<ParsedQueryParameter<ZonedDateTime>> parsedQueryParams = queryParameterParser.parseCustomQueryParameter(
    *           queryParams,
    *           "eventCreatedDateTime",
    *           ZonedDateTime::parse
@@ -85,7 +85,7 @@ public class DCSAQueryParameterParser {
    *
    *     @GetMapping
    *     public List<Event> getEvents(@RequestParam Map<String, String> queryParams) {
-   *         Optional<ParsedQueryParameter<ZonedDateTime> parsedQueryParam = queryParameterParser.parseCustomQueryParameterAtMostOnce(
+   *         Optional<ParsedQueryParameter<ZonedDateTime>> parsedQueryParam = queryParameterParser.parseCustomQueryParameterAtMostOnce(
    *           queryParams,
    *           "eventCreatedDateTime",
    *           ZonedDateTime::parse
