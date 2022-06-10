@@ -1,22 +1,11 @@
 package org.dcsa.skernel.domain.persistence.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter(AccessLevel.PRIVATE)
@@ -36,7 +25,10 @@ public class Location {
   @Column(name = "longitude", length = 11)
   private String longitude;
 
-  @Column(name = "un_location_code", length = 5, columnDefinition = "bpchar") // "bpchar" here is not a typing error
+  @Column(
+      name = "un_location_code",
+      length = 5,
+      columnDefinition = "bpchar") // "bpchar" here is not a typing error
   private String unLocationCode; /* REFERENCES dcsa_im_v3_0.un_location (un_location_code) */
 
   @ManyToOne(fetch = FetchType.LAZY)
