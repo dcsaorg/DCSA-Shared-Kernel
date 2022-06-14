@@ -45,6 +45,19 @@ public class Paginator {
 
   /**
    * Sets DCSA pagination headers.
+   */
+  public void setPageHeaders(
+    HttpServletRequest request,
+    HttpServletResponse response,
+    Cursor currentCursor,
+    PagedResult page,
+    String... allowedParameters
+  ) {
+    setPageHeaders(request, response, currentCursor, page.totalPages(), allowedParameters);
+  }
+
+  /**
+   * Sets DCSA pagination headers.
    *
    * @param totalPages total pages in a result (see also org.springframework.data.domain.Page)
    */
