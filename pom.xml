@@ -43,6 +43,7 @@
 		<module>shared-kernel-domain</module>
 		<module>shared-kernel-errors</module>
 		<module>shared-kernel-infrastructure</module>
+		<module>shared-kernel-test-helpers</module>
 		<module>shared-kernel-all</module>
 	</modules>
 
@@ -66,6 +67,11 @@
 			<dependency>
 				<groupId>org.dcsa.shared-kernel</groupId>
 				<artifactId>dcsa-shared-kernel-all</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.shared-kernel</groupId>
+				<artifactId>dcsa-shared-kernel-test-helpers</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
