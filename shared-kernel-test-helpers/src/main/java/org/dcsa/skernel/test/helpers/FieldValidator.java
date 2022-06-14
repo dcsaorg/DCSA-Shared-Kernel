@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.junit.jupiter.api.Assertions;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -55,7 +56,10 @@ public class FieldValidator {
     Set<String> fields = new HashSet<>();
     Class<?> current = cl;
     while (current != null) {
-      Arrays.stream(cl.getDeclaredFields()).map(Field::getName).forEach(fields::add);
+      Arrays.stream(cl.getDeclaredFields())
+        .filter(f -> (f.getModifiers() & (Modifier.STATIC|Modifier.TRANSIENT)) == 0)
+        .map(Field::getName)
+        .forEach(fields::add);
       current = current.getSuperclass();
     }
     return fields;
