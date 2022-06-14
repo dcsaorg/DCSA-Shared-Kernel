@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,8 +30,8 @@ public class FieldValidator {
    * Returns the names of all fields that are present in the target class but not in the src class.
    */
   public static <S, T> List<String> getFieldsMissingInSrc(Class<S> src, Class<T> target, String... excludeFields) {
-    Set<String> srcFields = Arrays.stream(src.getFields()).map(Field::getName).collect(Collectors.toSet());
-    Set<String> targetFields = Arrays.stream(target.getFields()).map(Field::getName).collect(Collectors.toSet());
+    Set<String> srcFields = getFields(src);
+    Set<String> targetFields = getFields(target);
     targetFields.removeAll(srcFields);
     targetFields.removeAll(Set.of(excludeFields));
     return targetFields.stream().map(name -> src.getSimpleName() + "." + name).collect(Collectors.toList());
@@ -48,5 +49,15 @@ public class FieldValidator {
    */
   public static <S, T> void assertFieldsAreEqual(Class<S> src, Class<T> target, String... excludeFields) {
     Assertions.assertEquals(Collections.emptyList(), getMissingFields(src, target, excludeFields));
+  }
+
+  private static Set<String> getFields(Class<?> cl) {
+    Set<String> fields = new HashSet<>();
+    Class<?> current = cl;
+    while (current != null) {
+      Arrays.stream(cl.getDeclaredFields()).map(Field::getName).forEach(fields::add);
+      current = current.getSuperclass();
+    }
+    return fields;
   }
 }
