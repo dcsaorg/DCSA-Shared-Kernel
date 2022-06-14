@@ -29,8 +29,8 @@ public class FieldValidator {
    * Returns the names of all fields that are present in the target class but not in the src class.
    */
   public static <S, T> List<String> getFieldsMissingInSrc(Class<S> src, Class<T> target, String... excludeFields) {
-    Set<String> srcFields = Arrays.stream(src.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet());
-    Set<String> targetFields = Arrays.stream(target.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet());
+    Set<String> srcFields = Arrays.stream(src.getFields()).map(Field::getName).collect(Collectors.toSet());
+    Set<String> targetFields = Arrays.stream(target.getFields()).map(Field::getName).collect(Collectors.toSet());
     targetFields.removeAll(srcFields);
     targetFields.removeAll(Set.of(excludeFields));
     return targetFields.stream().map(name -> src.getSimpleName() + "." + name).collect(Collectors.toList());
