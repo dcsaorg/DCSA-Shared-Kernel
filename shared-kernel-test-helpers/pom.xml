@@ -9,28 +9,15 @@
 		<version>${revision}${sha1}${changelist}</version>
 	</parent>
 
-	<artifactId>dcsa-shared-kernel-all</artifactId>
+	<artifactId>dcsa-shared-kernel-test-helpers</artifactId>
 	<version>${revision}${sha1}${changelist}</version>
 	<packaging>jar</packaging>
-	<name>DCSA-Shared-Kernel-All</name>
+	<name>DCSA-Shared-Kernel-Test-Helpers</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.dcsa.shared-kernel</groupId>
-			<artifactId>dcsa-shared-kernel-domain</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dcsa.shared-kernel</groupId>
-			<artifactId>dcsa-shared-kernel-errors</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dcsa.shared-kernel</groupId>
-			<artifactId>dcsa-shared-kernel-infrastructure</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dcsa.shared-kernel</groupId>
-			<artifactId>dcsa-shared-kernel-test-helpers</artifactId>
-			<scope>test</scope>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
 	</dependencies>
 
