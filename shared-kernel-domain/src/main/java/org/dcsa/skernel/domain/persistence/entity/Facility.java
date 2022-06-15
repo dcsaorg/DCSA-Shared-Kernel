@@ -31,16 +31,16 @@ public class Facility {
   private UUID id;
 
   @Column(name = "facility_name", length = 100)
-  private String name;
+  private String facilityName;
 
   @Column(name = "un_location_code", length = 5)
-  private String unLocationCode;
+  private String UNLocationCode;
 
   @Column(name = "facility_bic_code", length = 4)
-  private String bicCode;
+  private String facilityBICCode;
 
   @Column(name = "facility_smdg_code", length = 6)
-  private String smdgCode;
+  private String facilitySMDGCode;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "location_id")

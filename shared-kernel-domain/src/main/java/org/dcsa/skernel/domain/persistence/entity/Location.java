@@ -17,7 +17,7 @@ public class Location {
   private String id;
 
   @Column(name = "location_name", length = 100)
-  private String name;
+  private String locationName;
 
   @Column(name = "latitude", length = 10)
   private String latitude;
@@ -25,11 +25,8 @@ public class Location {
   @Column(name = "longitude", length = 11)
   private String longitude;
 
-  @Column(
-      name = "un_location_code",
-      length = 5,
-      columnDefinition = "bpchar") // "bpchar" here is not a typing error
-  private String unLocationCode; /* REFERENCES dcsa_im_v3_0.un_location (un_location_code) */
+  @Column(name = "un_location_code", length = 5, columnDefinition = "bpchar")
+  private String UNLocationCode; /* REFERENCES dcsa_im_v3_0.un_location (un_location_code) */
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "address_id")
