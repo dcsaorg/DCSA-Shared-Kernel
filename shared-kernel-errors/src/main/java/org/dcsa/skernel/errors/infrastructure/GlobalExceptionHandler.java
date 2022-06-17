@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -158,6 +160,23 @@ public class GlobalExceptionHandler {
     return handleConcreteRequestErrorMessageException(
       httpServletRequest,
       ConcreteRequestErrorMessageException.conflict(ex.getLocalizedMessage(), ex));
+  }
+  
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<RequestFailureTO> handleMethodArgumentNotValidException(
+    HttpServletRequest httpServletRequest, MethodArgumentNotValidException ex) {
+
+    return handleConcreteRequestErrorMessageException(
+      httpServletRequest,
+      ConcreteRequestErrorMessageException.invalidInput(ex.getMessage(), ex));
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<RequestFailureTO> handleHttpMessageNotReadableException(
+    HttpServletRequest httpServletRequest, HttpMessageNotReadableException ex) {
+    return handleConcreteRequestErrorMessageException(
+      httpServletRequest,
+      ConcreteRequestErrorMessageException.invalidParameter(ex.getMessage(), ex));
   }
 
   @ExceptionHandler(Exception.class)
