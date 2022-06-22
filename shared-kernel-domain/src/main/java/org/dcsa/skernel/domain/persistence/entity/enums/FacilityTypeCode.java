@@ -11,4 +11,5 @@ public enum FacilityTypeCode {
   POTE,
   PBPL,
   BRTH,
+  RAMP,
 }
