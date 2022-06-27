@@ -1,13 +1,12 @@
 package org.dcsa.skernel.domain.persistence.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
+@EqualsAndHashCode
 @Setter(value = AccessLevel.PROTECTED)
 @Getter
 @NoArgsConstructor
@@ -47,17 +46,4 @@ public class BaseVessel {
 
   @Column(name = "dimension_unit", length = 3)
   protected String dimensionUnit;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-    BaseVessel vessel = (BaseVessel) o;
-    return id != null && Objects.equals(id, vessel.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
 }
