@@ -56,7 +56,7 @@ public class FieldValidator {
     Set<String> fields = new HashSet<>();
     Class<?> current = cl;
     while (current != null) {
-      Arrays.stream(cl.getDeclaredFields())
+      Arrays.stream(current.getDeclaredFields())
         .filter(f -> (f.getModifiers() & (Modifier.STATIC|Modifier.TRANSIENT)) == 0)
         .map(Field::getName)
         .forEach(fields::add);
