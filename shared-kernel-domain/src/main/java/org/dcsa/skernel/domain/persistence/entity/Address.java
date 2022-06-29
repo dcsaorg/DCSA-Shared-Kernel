@@ -40,7 +40,7 @@ public class Address {
   private String floor;
 
   @Column(name = "postal_code", length = 10)
-  private String postalCode;
+  private String postCode;
 
   @Column(name = "city", length = 65)
   private String city;
