@@ -36,7 +36,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = VesselIMONumberValidator.class)
 public @interface ValidVesselIMONumber {
 
-    boolean allowNull() default false;
+    boolean allowNull() default true;
 
     String message() default "must be a valid Vessel IMO Number";
 
