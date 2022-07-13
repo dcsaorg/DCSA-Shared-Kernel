@@ -2,7 +2,7 @@ name: Publish SNAPSHOT on PR
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master, reactive ]
 
 jobs:
   publish:
