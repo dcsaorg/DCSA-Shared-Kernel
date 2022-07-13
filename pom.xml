@@ -16,11 +16,10 @@
 	<description>Shared Kernel of entities for DCSA APIs</description>
 
 	<properties>
-		<java.version>11</java.version>
 		<dcsa.version>0.8.34</dcsa.version>
 		<dcsa.core.tag/>
 		<dcsa.artifacttype>-SNAPSHOT</dcsa.artifacttype>
-		<revision>0.0.3</revision>
+		<revision>0.0.4</revision>
 		<sha1/>
 		<changelist>-SNAPSHOT</changelist>
 	</properties>

@@ -18,6 +18,8 @@ public enum DCSAResponsibleAgencyCode {
   FMC(""),
   CBSA(""),
   ZZZ("zzz"),
+  LEI(""),
+  DID(""),
   DCSA("");
 
   private static final Map<String, DCSAResponsibleAgencyCode> LEGACY_CODES_2_DCSA_CODE;
