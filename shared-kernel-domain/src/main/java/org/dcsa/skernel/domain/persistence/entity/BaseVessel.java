@@ -1,6 +1,7 @@
 package org.dcsa.skernel.domain.persistence.entity;
 
 import lombok.*;
+import org.dcsa.skernel.domain.persistence.entity.enums.DimensionUnit;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -44,6 +45,7 @@ public class BaseVessel {
   @Column(name = "width", columnDefinition = "numeric")
   protected Float vesselWidth;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "dimension_unit", length = 3)
-  protected String dimensionUnit;
+  protected DimensionUnit dimensionUnit;
 }
