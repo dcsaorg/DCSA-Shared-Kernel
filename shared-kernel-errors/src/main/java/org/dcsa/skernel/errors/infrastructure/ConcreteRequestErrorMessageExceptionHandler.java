@@ -27,7 +27,7 @@ public class ConcreteRequestErrorMessageExceptionHandler extends BaseExceptionHa
     HttpStatus httpStatus =
       responseStatusAnnotation != null ? responseStatusAnnotation.value() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    if (httpStatus.isError()) {
+    if (httpStatus.is5xxServerError()) {
       log.warn("Exception {}: {}", e.getClass().getName(), e.getMessage(), e);
     } else {
       log.debug("Exception {}: {}", e.getClass().getName(), e.getMessage());
