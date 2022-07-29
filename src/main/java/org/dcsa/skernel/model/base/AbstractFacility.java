@@ -38,5 +38,5 @@ public class AbstractFacility {
 
   @JsonIgnore
   @Column("location_id")
-  private String locationID;
+  private UUID locationID;
 }

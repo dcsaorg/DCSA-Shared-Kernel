@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface PartyIdentifyingCodeRepository extends ReactiveCrudRepository<PartyIdentifyingCode, UUID> {
-    Flux<PartyIdentifyingCode> findAllByPartyID(String partyID);
+    Flux<PartyIdentifyingCode> findAllByPartyID(UUID partyID);
 }

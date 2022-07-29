@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class PartyContactDetailsServiceImpl implements PartyContactDetailsService {
@@ -18,7 +20,7 @@ public class PartyContactDetailsServiceImpl implements PartyContactDetailsServic
   private final PartyContactDetailsMapper partyContactDetailsMapper;
 
   @Override
-  public Flux<PartyContactDetailsTO> findTOByPartyID(String partyID) {
+  public Flux<PartyContactDetailsTO> findTOByPartyID(UUID partyID) {
     return partyContactDetailsRepository
         .findByPartyID(partyID)
         .map(partyContactDetailsMapper::partyContactDetailsToDTO);
@@ -26,7 +28,7 @@ public class PartyContactDetailsServiceImpl implements PartyContactDetailsServic
 
   @Override
   public Mono<PartyContactDetailsTO> ensureResolvable(
-      PartyContactDetailsTO partyContactDetailsTO, String partyId) {
+      PartyContactDetailsTO partyContactDetailsTO, UUID partyId) {
     PartyContactDetails partyContactDetails =
         partyContactDetailsMapper.dtoToPartyContactDetails(partyContactDetailsTO, partyId);
     return partyContactDetailsRepository
@@ -36,7 +38,7 @@ public class PartyContactDetailsServiceImpl implements PartyContactDetailsServic
   }
 
   private Mono<PartyContactDetails> saveNewPartyContactDetails(
-      PartyContactDetails partyContactDetails, String partyId) {
+      PartyContactDetails partyContactDetails, UUID partyId) {
     partyContactDetails.setPartyID(partyId);
     return partyContactDetailsRepository.save(partyContactDetails);
   }

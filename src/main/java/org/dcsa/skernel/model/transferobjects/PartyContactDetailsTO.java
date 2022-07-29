@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.dcsa.skernel.model.PartyContactDetails;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +20,7 @@ public class PartyContactDetailsTO {
    * Use a mapper instead
    */
   @Deprecated
-  public PartyContactDetails toPartyContactDetails(String partyID) {
+  public PartyContactDetails toPartyContactDetails(UUID partyID) {
     PartyContactDetails partyContactDetails = new PartyContactDetails();
     partyContactDetails.setName(this.getName());
     partyContactDetails.setEmail(this.getEmail());

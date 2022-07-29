@@ -52,7 +52,7 @@ class PartyServiceImplTest {
   @BeforeEach
   void init() {
     party = new Party();
-    party.setId("partyID1");
+    party.setId(UUID.randomUUID());
     party.setPartyName("partyName");
     party.setPublicKey("pubKey");
     party.setTaxReference1("TaxRef1");

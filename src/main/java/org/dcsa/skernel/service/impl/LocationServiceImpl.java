@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
@@ -65,14 +66,14 @@ public class LocationServiceImpl implements LocationService {
   }
 
   @Override
-  public Mono<LocationTO> findTOById(String locationID) {
+  public Mono<LocationTO> findTOById(UUID locationID) {
     return locationRepository.findById(locationID)
       .switchIfEmpty(Mono.error(ConcreteRequestErrorMessageException.notFound("Cannot find location with ID: " + locationID)))
       .flatMap(this::getLocationTO);
   }
 
   @Override
-  public Mono<LocationTO> fetchLocationByID(String id) {
+  public Mono<LocationTO> fetchLocationByID(UUID id) {
     return Mono.justOrEmpty(id)
       .flatMap(locationRepository::findById)
       .flatMap(this::getLocationTO);
@@ -80,7 +81,7 @@ public class LocationServiceImpl implements LocationService {
 
   @SuppressWarnings("OptionalGetWithoutIsPresent")
   @Override
-  public Mono<LocationTO> fetchLocationDeepObjByID(String id) {
+  public Mono<LocationTO> fetchLocationDeepObjByID(UUID id) {
     if (id == null) return Mono.empty();
     return locationRepository
       .findById(id)
@@ -105,7 +106,7 @@ public class LocationServiceImpl implements LocationService {
 
   @Override
   public Mono<LocationTO> createLocationByTO(
-    LocationTO locationTO, Function<String, Mono<Boolean>> updateEDocumentation) {
+    LocationTO locationTO, Function<UUID, Mono<Boolean>> updateEDocumentation) {
 
     if (Objects.isNull(locationTO)) {
       return Mono.empty();
@@ -140,13 +141,13 @@ public class LocationServiceImpl implements LocationService {
 
   @Override
   public Mono<LocationTO> resolveLocationByTO(
-    String currentLocationIDInEDocumentation,
+    UUID currentLocationIDInEDocumentation,
     LocationTO locationTO,
-    Function<String, Mono<Boolean>> updateEDocumentationCallback) {
+    Function<UUID, Mono<Boolean>> updateEDocumentationCallback) {
 
     // locationTO is the location received from the update eDocumentation request
-    if (Objects.isNull(locationTO)) {
-      if (StringUtils.isEmpty(currentLocationIDInEDocumentation)) {
+    if (locationTO == null) {
+      if (currentLocationIDInEDocumentation == null) {
         // it's possible that there may be no location linked to eDocumentation
         return Mono.empty();
       } else {

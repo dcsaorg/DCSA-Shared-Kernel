@@ -36,7 +36,7 @@ public class PartyServiceImpl implements PartyService {
     Party p = partyMapper.dtoToParty(partyTO);
     if (p.getId() == null) {
       // Work around for DDT-1013
-      p.setId(String.valueOf(UUID.randomUUID()));
+      p.setId(UUID.randomUUID());
       p.setNew(true);
     }
     return partyRepository.save(p)
@@ -57,7 +57,7 @@ public class PartyServiceImpl implements PartyService {
   }
 
   private Mono<List<PartyTO.IdentifyingCode>> savePartyIdentifyingCodesForParty(
-      List<PartyTO.IdentifyingCode> partyIdentifyingCodes, String partyId) {
+      List<PartyTO.IdentifyingCode> partyIdentifyingCodes, UUID partyId) {
     return Flux.fromIterable(partyIdentifyingCodes)
         .map(identifyingCode -> mapIdcCodeToPartyIdc.apply(partyId, identifyingCode))
         .flatMap(partyCodeListResponsibleAgencyRepository::save)
@@ -66,7 +66,7 @@ public class PartyServiceImpl implements PartyService {
   }
 
   private Mono<List<PartyContactDetailsTO>> ensureResolvablePartyContactDetailsForParty(
-      List<PartyContactDetailsTO> partyContactDetailsTOList, String partyId) {
+      List<PartyContactDetailsTO> partyContactDetailsTOList, UUID partyId) {
     return Flux.fromIterable(partyContactDetailsTOList)
         .flatMap(
             partyContactDetailsTO ->
@@ -74,7 +74,7 @@ public class PartyServiceImpl implements PartyService {
         .collectList();
   }
 
-  private final BiFunction<String, PartyTO.IdentifyingCode, PartyIdentifyingCode>
+  private final BiFunction<UUID, PartyTO.IdentifyingCode, PartyIdentifyingCode>
       mapIdcCodeToPartyIdc =
           (partyId, idc) -> {
             PartyIdentifyingCode partyCodeListResponsibleAgency = new PartyIdentifyingCode();
@@ -113,7 +113,7 @@ public class PartyServiceImpl implements PartyService {
           };
 
   @Override
-  public Mono<PartyTO> findTOById(String partyID) {
+  public Mono<PartyTO> findTOById(UUID partyID) {
     return partyRepository
         .findById(partyID)
         .switchIfEmpty(

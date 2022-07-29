@@ -11,10 +11,10 @@ import java.util.UUID;
 @Repository
 public interface PartyContactDetailsRepository
     extends ReactiveCrudRepository<PartyContactDetails, UUID> {
-  Flux<PartyContactDetails> findByPartyID(String partyID);
+  Flux<PartyContactDetails> findByPartyID(UUID partyID);
 
   Mono<PartyContactDetails> findByNameAndEmailAndAndPhoneAndUrlAndPartyID(
-      String name, String email, String phone, String url, String partyID);
+      String name, String email, String phone, String url, UUID partyID);
 
   default Mono<PartyContactDetails> findByContent(PartyContactDetails partyContactDetails) {
     if (partyContactDetails.getId() != null) {

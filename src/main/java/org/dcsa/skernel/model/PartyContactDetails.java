@@ -15,7 +15,7 @@ public class PartyContactDetails {
   @Id private UUID id;
 
   @Column("party_id")
-  private String partyID;
+  private UUID partyID;
 
   @Size(max = 100)
   @Column("name")
