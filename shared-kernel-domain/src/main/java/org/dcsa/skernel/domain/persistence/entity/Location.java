@@ -3,6 +3,7 @@ package org.dcsa.skernel.domain.persistence.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Builder(toBuilder = true)
@@ -13,8 +14,9 @@ import javax.persistence.*;
 @Table(name = "location")
 public class Location {
   @Id
-  @Column(name = "id", nullable = false, length = 100)
-  private String id;
+  @GeneratedValue
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   @Column(name = "location_name", length = 100)
   private String locationName;
