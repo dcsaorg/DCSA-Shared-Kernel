@@ -17,6 +17,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -39,7 +41,7 @@ class PartyContactDetailsServiceImplTest {
   @BeforeEach
   public void init() {
     partyContactDetails = new PartyContactDetails();
-    partyContactDetails.setPartyID("PartyID1");
+    partyContactDetails.setPartyID(UUID.randomUUID());
     partyContactDetails.setName("partyName");
     partyContactDetails.setEmail("party1@party.org");
     partyContactDetails.setPhone("0123456789");

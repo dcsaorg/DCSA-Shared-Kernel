@@ -18,7 +18,7 @@ public class AbstractLocation {
 
     @Id
     @JsonIgnore
-    private String id;
+    private UUID id;
 
     @Column("location_name")
     @Size(max = 100)

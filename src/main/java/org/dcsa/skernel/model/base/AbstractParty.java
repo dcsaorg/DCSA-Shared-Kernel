@@ -6,13 +6,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Data
 public class AbstractParty {
 
   @Id
   @JsonIgnore
-  private String id;
+  private UUID id;
 
   @Column("party_name")
   @Size(max = 100)

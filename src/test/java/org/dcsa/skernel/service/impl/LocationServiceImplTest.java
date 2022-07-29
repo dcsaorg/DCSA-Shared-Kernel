@@ -72,7 +72,7 @@ class LocationServiceImplTest {
     facility.setUnLocationCode("x".repeat(5));
 
     location = new Location();
-    location.setId(UUID.randomUUID().toString());
+    location.setId(UUID.randomUUID());
     location.setLocationName("Location Name");
     location.setUnLocationCode("x".repeat(5));
     location.setLongitude("x".repeat(10));
@@ -196,10 +196,10 @@ class LocationServiceImplTest {
   @DisplayName("Test fetch optional locationTO by ID with facility and address")
   void testFetchLocationTOByIDWithAddressAndFacility() {
 
-    String locationID = UUID.randomUUID().toString();
+    UUID locationID = UUID.randomUUID();
     location.setId(locationID);
 
-    when(locationRepository.findById(any(String.class))).thenReturn(Mono.just(location));
+    when(locationRepository.findById(any(UUID.class))).thenReturn(Mono.just(location));
     when(addressService.findByIdOrEmpty(any())).thenReturn(Mono.just(address));
     when(facilityService.findByIdOrEmpty(any())).thenReturn(Mono.just(facility));
 
@@ -224,12 +224,12 @@ class LocationServiceImplTest {
   @DisplayName("Test fetch optional locationTO by ID without facility and address")
   void testFetchLocationTOByIDWithoutAddressAndFacility() {
 
-    String locationID = UUID.randomUUID().toString();
+    UUID locationID = UUID.randomUUID();
     location.setId(locationID);
     location.setAddressID(null);
     location.setFacilityID(null);
 
-    when(locationRepository.findById(any(String.class))).thenReturn(Mono.just(location));
+    when(locationRepository.findById(any(UUID.class))).thenReturn(Mono.just(location));
     when(addressService.findByIdOrEmpty(any())).thenReturn(Mono.empty());
     when(facilityService.findByIdOrEmpty(any())).thenReturn(Mono.empty());
 
@@ -249,12 +249,12 @@ class LocationServiceImplTest {
   @DisplayName("Test fetch optional locationTO DeepObj by ID")
   void testFetchLocationTODeepObjByID() {
 
-    String locationID = UUID.randomUUID().toString();
+    UUID locationID = UUID.randomUUID();
     location.setId(locationID);
     location.setAddressID(address.getId());
     location.setFacilityID(facility.getFacilityID());
 
-    when(locationRepository.findById(any(String.class))).thenReturn(Mono.just(location));
+    when(locationRepository.findById(any(UUID.class))).thenReturn(Mono.just(location));
     when(addressService.findByIdOrEmpty(any(UUID.class))).thenReturn(Mono.just(address));
     when(facilityService.findByIdOrEmpty(any(UUID.class))).thenReturn(Mono.just(facility));
 

@@ -19,7 +19,7 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class Party extends AbstractParty implements Persistable<String> {
+public class Party extends AbstractParty implements Persistable<UUID> {
 
   @Column("address_id")
   private UUID addressID;

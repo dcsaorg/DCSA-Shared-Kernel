@@ -19,7 +19,7 @@ public class PartyIdentifyingCode {
   private DCSAResponsibleAgencyCode dcsaResponsibleAgencyCode;
 
   @Column("party_id")
-  private String partyID;
+  private UUID partyID;
 
   @Column("party_code")
   private String partyCode;
