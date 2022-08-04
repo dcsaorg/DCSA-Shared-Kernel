@@ -34,6 +34,7 @@ public class UniversalServiceReferenceValidatorTest {
       Assertions.assertFalse(validate(TestEntity.of("SR40501A")));
       // Length issue
       Assertions.assertFalse(validate(TestEntity.of("SR000002B")));
+      Assertions.assertFalse(validate(TestEntity.of("SR0002B")));
       // Not quite a number (but would fool Integer.parseInt)
       Assertions.assertFalse(validate(TestEntity.of("SR-0001D")));
     }
