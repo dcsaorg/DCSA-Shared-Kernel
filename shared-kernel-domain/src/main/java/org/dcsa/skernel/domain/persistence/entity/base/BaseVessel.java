@@ -1,6 +1,7 @@
-package org.dcsa.skernel.domain.persistence.entity;
+package org.dcsa.skernel.domain.persistence.entity.base;
 
 import lombok.*;
+import org.dcsa.skernel.domain.persistence.entity.Carrier;
 import org.dcsa.skernel.domain.persistence.entity.enums.DimensionUnit;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "vessel")
-public class BaseVessel {
+public abstract class BaseVessel {
 
   @Id
   @GeneratedValue
