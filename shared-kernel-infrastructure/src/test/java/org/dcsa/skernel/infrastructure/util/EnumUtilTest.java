@@ -1,5 +1,6 @@
 package org.dcsa.skernel.infrastructure.util;
 
+import org.dcsa.skernel.errors.exceptions.BadRequestException;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.junit.jupiter.api.Test;
 
@@ -26,10 +27,9 @@ public class EnumUtilTest {
     assertEquals(expected, toEnumList("VALUE1, VALUE2, VALUE3", MyTestEnum.class));
   }
 
-  // Note BadRequestException is not public so cannot access it here.
   @Test
   public void testIllegalValue() {
-    assertThrows(ConcreteRequestErrorMessageException.class, () -> {
+    assertThrows(BadRequestException.class, () -> {
       toEnumList("VALUE4", MyTestEnum.class);
     });
   }
