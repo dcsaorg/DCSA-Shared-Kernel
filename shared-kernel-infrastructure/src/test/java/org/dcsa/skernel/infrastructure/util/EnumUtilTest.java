@@ -28,7 +28,7 @@ public class EnumUtilTest {
 
   // Note BadRequestException is not public so cannot access it here.
   @Test
-  public void testIlligalValue() {
+  public void testIllegalValue() {
     assertThrows(ConcreteRequestErrorMessageException.class, () -> {
       toEnumList("VALUE4", MyTestEnum.class);
     });

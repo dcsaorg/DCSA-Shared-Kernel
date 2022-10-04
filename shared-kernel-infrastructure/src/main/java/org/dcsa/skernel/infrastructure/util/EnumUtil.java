@@ -16,15 +16,12 @@ public class EnumUtil {
     if (values == null) {
       return null;
     }
-    T[] enumValues = enumClass.getEnumConstants();
-    return Arrays.stream(values.split(","))
-      .map(String::trim)
-      .map(s -> Arrays.stream(enumValues)
-        .filter(v -> v.name().equals(s))
-        .findFirst()
-        .orElseThrow(() -> ConcreteRequestErrorMessageException.invalidInput(
-          "The value '" + s + "' cannot be mapped to the enum " + enumClass.getSimpleName()))
-      )
-      .toList();
+    try {
+      return Arrays.stream(values.split(","))
+        .map(s -> Enum.valueOf(enumClass, s.trim()))
+        .toList();
+    } catch (IllegalArgumentException e) {
+      throw ConcreteRequestErrorMessageException.invalidInput(e.getMessage());
+    }
   }
 }
