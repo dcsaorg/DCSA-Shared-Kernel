@@ -1,18 +1,14 @@
 package org.dcsa.skernel.infrastructure.sorting;
 
-import lombok.extern.slf4j.Slf4j;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.skernel.infrastructure.pagination.Cursor;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 /** Helper class for transforming the DCSA Sorting syntax to Spring-data Sorting. */
-@Slf4j
-@Component
 public class Sorter {
 
   private final List<Cursor.SortBy> defaultSort;
