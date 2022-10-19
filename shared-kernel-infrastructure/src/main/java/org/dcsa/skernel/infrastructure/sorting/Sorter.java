@@ -4,9 +4,8 @@ import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.skernel.infrastructure.pagination.Cursor;
 import org.springframework.data.domain.Sort;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /** Helper class for transforming the DCSA Sorting syntax to Spring-data Sorting. */
 public class Sorter {
@@ -17,6 +16,16 @@ public class Sorter {
   public Sorter(List<Cursor.SortBy> defaultSort, String... sortableFields) {
     this.defaultSort = defaultSort;
     this.sortableFields = Set.of(sortableFields);
+  }
+
+  public <T> Sorter(List<Cursor.SortBy> defaultSort, T spec) {
+    this.sortableFields = getFieldNameFromClass(new HashSet<>(), spec.getClass().getDeclaredFields());
+    this.defaultSort = defaultSort;
+  }
+
+  public <T> Sorter(List<Cursor.SortBy> defaultSort, Class<T> clazz) {
+    this.sortableFields = getFieldNameFromClass(new HashSet<>(), clazz.getDeclaredFields());
+    this.defaultSort = defaultSort;
   }
 
   /**
@@ -57,5 +66,16 @@ public class Sorter {
               return new Cursor.SortBy(direction, actualSortField);
             })
         .toList();
+  }
+
+  private static Set<String> getFieldNameFromClass(Set<String> fieldList, Field[] fields) {
+    for (Field field: fields) {
+      if(!field.getType().isMemberClass()) {
+        fieldList.add(field.getName());
+      } else {
+        getFieldNameFromClass(fieldList, field.getType().getDeclaredFields());
+      }
+    }
+    return fieldList;
   }
 }
