@@ -54,7 +54,10 @@ class SorterTest {
             ConcreteRequestErrorMessageException.class,
             () -> sorter.parseSort("illegalField:DESC"));
 
-    assertEquals("Cannot sort on 'illegalField'", returnedException.getMessage());
+    assertEquals(
+      "Cannot sort on 'illegalField'. This implementation supports the following sortable fields: field1, field2",
+      returnedException.getMessage()
+    );
   }
 
   @Test
@@ -64,6 +67,9 @@ class SorterTest {
             ConcreteRequestErrorMessageException.class,
             () -> sorter.parseSort("field1:ILLEGALDIRECTION"));
 
-    assertEquals("'ILLEGALDIRECTION' is not a valid direction", returnedException.getMessage());
+    assertEquals(
+      "'ILLEGALDIRECTION' is not a valid direction. Please use ASC or DESC as direction.",
+      returnedException.getMessage()
+    );
   }
 }
