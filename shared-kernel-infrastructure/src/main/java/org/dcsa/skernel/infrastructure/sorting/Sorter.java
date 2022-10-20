@@ -7,16 +7,24 @@ import org.springframework.data.domain.Sort;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** Helper class for transforming the DCSA Sorting syntax to Spring-data Sorting. */
 public class Sorter {
 
   private final List<Cursor.SortBy> defaultSort;
   private final Set<String> sortableFields;
+  private final String sortableFieldsAsStr;
 
   public Sorter(List<Cursor.SortBy> defaultSort, String... sortableFields) {
     this.defaultSort = defaultSort;
     this.sortableFields = Set.of(sortableFields);
+    if (this.sortableFields.isEmpty()) {
+      throw new IllegalArgumentException("Must allow at least one sortable field!");
+    }
+    this.sortableFieldsAsStr = this.sortableFields.stream()
+      .sorted()
+      .collect(Collectors.joining(", "));
   }
 
   /**
@@ -32,13 +40,15 @@ public class Sorter {
         .map(String::trim)
         .map(
             sortField -> {
-              String[] fieldAndDirection = sortField.split(":");
+              String[] fieldAndDirection = sortField.split(":", 2);
               String actualSortField = fieldAndDirection[0];
               Sort.Direction direction = Sort.Direction.ASC;
+              assert fieldAndDirection.length <= 2;
 
               if (!sortableFields.contains(actualSortField)) {
                 throw ConcreteRequestErrorMessageException.invalidQuery(
-                    "sort", "Cannot sort on '" + actualSortField + "'");
+                    "sort", "Cannot sort on '" + actualSortField
+                    + "'. This implementation supports the following sortable fields: " + this.sortableFieldsAsStr);
               }
 
               if (fieldAndDirection.length == 2) {
@@ -48,10 +58,8 @@ public class Sorter {
                             () ->
                                 ConcreteRequestErrorMessageException.invalidQuery(
                                     "sort",
-                                    "'" + fieldAndDirection[1] + "' is not a valid direction"));
-              } else if (fieldAndDirection.length > 2) {
-                throw ConcreteRequestErrorMessageException.invalidQuery(
-                    "sort", "'" + sortField + "' is not valid");
+                                    "'" + fieldAndDirection[1] + "' is not a valid direction."
+                                      + " Please use ASC or DESC as direction."));
               }
 
               return new Cursor.SortBy(direction, actualSortField);
