@@ -218,7 +218,7 @@ public class Pagination {
 
       String[] keyParts = key.split(":");
       if (keyParts.length == 2) {
-        return filterParameters.contains(keyParts[0]) && ComparisonType.valueSet.contains(keyParts[1].toUpperCase());
+        return filterParameters.contains(keyParts[0]) && ComparisonType.VALUE_SET.contains(keyParts[1].toUpperCase());
       } else {
         return false;
       }

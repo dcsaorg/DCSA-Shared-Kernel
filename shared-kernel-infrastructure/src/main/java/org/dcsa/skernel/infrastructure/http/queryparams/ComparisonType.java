@@ -12,7 +12,7 @@ public enum ComparisonType {
   LT,
   ;
 
-  public final static Set<String> valueSet = Arrays.stream(values())
+  public final static Set<String> VALUE_SET = Arrays.stream(values())
     .map(Enum::name)
     .collect(Collectors.toSet());
 }
