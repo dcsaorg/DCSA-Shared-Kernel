@@ -1,9 +1,5 @@
 package org.dcsa.skernel.infrastructure.http.queryparams;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public enum ComparisonType {
   GT,
   GTE,
@@ -11,8 +7,4 @@ public enum ComparisonType {
   LTE,
   LT,
   ;
-
-  public final static Set<String> VALUE_SET = Arrays.stream(values())
-    .map(Enum::name)
-    .collect(Collectors.toSet());
 }

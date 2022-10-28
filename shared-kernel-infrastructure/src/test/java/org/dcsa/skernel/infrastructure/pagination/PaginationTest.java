@@ -1,6 +1,5 @@
 package org.dcsa.skernel.infrastructure.pagination;
 
-import org.dcsa.skernel.infrastructure.pagination.Pagination.FilterParameters;
 import org.dcsa.skernel.infrastructure.pagination.Pagination.PagingNames;
 import org.dcsa.skernel.infrastructure.sorting.Sorter.SortableFields;
 import org.junit.jupiter.api.BeforeEach;
@@ -136,127 +135,18 @@ public class PaginationTest {
   }
 
   @Test
-  public void testSetPageHeaders_NoParametersAllowed_NoSort_LimitAlwaysAllowed_MultiplePageIsIgnored() {
-    // Setup
-    when(request.getParameterMap()).thenReturn(
-      sortedMapOf(
-        "carrierBookingReference", "cbr-12424534",
-        "limit", "2",
-        "page", "12345",
-        "otherStuff", "testValue",
-        "sort", "createdDateTime"
-      ));
-
-    // Execute
-    Pagination
-      .with(request, response, 1, 10)
-      .sortBy(defaultSort)
-      .filterParameters(FilterParameters.allowNone())
-      .paginate(pageRequest ->
-        new PagedResult<>(new PageImpl<>(List.of(""), Pageable.unpaged(), 3))
-      );
-
-    // Verify
-    String parameters = "&limit=2";
-    verify(response).setHeader("Current-Page", "http://localhost:9090/vx/myService?page=1" + parameters);
-    verify(response).setHeader("First-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-    verify(response).setHeader("Last-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Next-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Previous-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-  }
-
-  @Test
-  public void testSetPageHeaders_NoParametersAllowedAndWithSort() {
-    // Setup
-    when(request.getParameterMap()).thenReturn(
-      sortedMapOf("carrierBookingReference", "cbr-12424534", "otherStuff", "testValue", "sort", "createdDateTime:asc"));
-
-    // Execute
-    Pagination
-      .with(request, response, 1, 10)
-      .sortBy("createdDateTime:asc", defaultSort, SortableFields.of("createdDateTime"))
-      .filterParameters(FilterParameters.allowNone())
-      .paginate(pageRequest ->
-        new PagedResult<>(new PageImpl<>(List.of(""), Pageable.unpaged(), 3))
-      );
-
-    // Verify
-    String parameters = "&sort=createdDateTime%3Aasc";
-    verify(response).setHeader("Current-Page", "http://localhost:9090/vx/myService?page=1" + parameters);
-    verify(response).setHeader("First-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-    verify(response).setHeader("Last-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Next-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Previous-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-  }
-
-  @Test
-  public void testSetPageHeaders_CertainParametersAllowed() {
-    // Setup
-    when(request.getParameterMap()).thenReturn(
-      sortedMapOf("carrierBookingReference", "cbr-12424534", "otherStuff", "testValue"));
-
-    // Execute
-    Pagination
-      .with(request, response, 1, 10)
-      .sortBy(defaultSort)
-      .filterParameters(FilterParameters.allow("carrierBookingReference"))
-      .paginate(pageRequest ->
-        new PagedResult<>(new PageImpl<>(List.of(""), Pageable.unpaged(), 3))
-      );
-
-    // Verify
-    String parameters = "&carrierBookingReference=cbr-12424534";
-    verify(response).setHeader("Current-Page", "http://localhost:9090/vx/myService?page=1" + parameters);
-    verify(response).setHeader("First-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-    verify(response).setHeader("Last-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Next-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Previous-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-  }
-
-  @Test
-  public void testSetPageHeaders_CertainParametersAllowedByClass() {
-    // Setup
-    when(request.getParameterMap()).thenReturn(
-      sortedMapOf(
-        "carrierBookingReference", "cbr-12424534",
-        "vesselIMONumber", "vimon2345",
-        "otherStuff", "testValue"
-      ));
-
-    // Execute
-    Pagination
-      .with(request, response, 1, 10)
-      .sortBy(defaultSort)
-      .filterParameters(FilterParameters.allow(TestFilterParameters.class))
-      .paginate(pageRequest ->
-        new PagedResult<>(new PageImpl<>(List.of(""), Pageable.unpaged(), 3))
-      );
-
-    // Verify
-    String parameters = "&carrierBookingReference=cbr-12424534&vesselIMONumber=vimon2345";
-    verify(response).setHeader("Current-Page", "http://localhost:9090/vx/myService?page=1" + parameters);
-    verify(response).setHeader("First-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-    verify(response).setHeader("Last-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Next-Page", "http://localhost:9090/vx/myService?page=2" + parameters);
-    verify(response).setHeader("Previous-Page", "http://localhost:9090/vx/myService?page=0" + parameters);
-  }
-  public record TestFilterParameters(String carrierBookingReference, String vesselIMONumber) { }
-
-  @Test
   public void testSetPageHeaders_CustomPagingNames() {
     // Setup
     when(request.getParameterMap()).thenReturn(
       sortedMapOf(
         "sizzle", "45",
-        "soffle", "createdDateTime",
-        "otherStuff", "testValue"
+        "soffle", "createdDateTime"
       ));
 
     // Execute
     Pagination
-      .with(request, response, 1, 10, PagingNames.of("poff", "sizzle", "soffle"))
+      .with(request, response, 1, 10, PagingNames.of("poff"))
       .sortBy("createdDateTime", defaultSort, SortableFields.of("createdDateTime"))
-      .filterParameters(FilterParameters.allowNone())
       .paginate(pageRequest ->
         new PagedResult<>(new PageImpl<>(List.of(""), Pageable.unpaged(), 3))
       );
