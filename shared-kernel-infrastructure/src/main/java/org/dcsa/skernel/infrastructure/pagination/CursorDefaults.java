@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Defaults if no other options are given.
  */
+@Deprecated
 @Value
 @RequiredArgsConstructor
 public class CursorDefaults {

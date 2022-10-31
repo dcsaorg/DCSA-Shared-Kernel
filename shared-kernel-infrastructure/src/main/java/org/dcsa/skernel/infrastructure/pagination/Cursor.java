@@ -14,9 +14,11 @@ import java.util.stream.Collectors;
 /**
  * A cursor implementation that maps to how spring data does paging.
  */
+@Deprecated
 @Value
 @RequiredArgsConstructor(onConstructor_={@JsonCreator})
 public class Cursor {
+  @Deprecated
   public record SortBy(Sort.Direction direction, String field) {}
 
   private final int page;

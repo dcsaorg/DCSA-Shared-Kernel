@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Helper class for doing "cursor" based pagination using spring-data.
  */
+@Deprecated
 @Slf4j
 @Component
 @RequiredArgsConstructor
