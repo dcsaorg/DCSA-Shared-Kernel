@@ -32,18 +32,20 @@ class SorterTest {
   @Test
   void testSorterParseSort_tWithDescSortOnField() {
     List<Cursor.SortBy> sortList = sorter.parseSort("field2:DESC");
-    assertEquals(1, sortList.size());
-    assertEquals(Sort.Direction.DESC, sortList.get(0).direction());
-    assertEquals("field2", sortList.get(0).field());
-  }
-
-  @Test
-  void testSorterParseSort_WithMultipleSortFields() {
-    List<Cursor.SortBy> sortList = sorter.parseSort("field2:DESC,field1:ASC");
     assertEquals(2, sortList.size());
     assertEquals(Sort.Direction.DESC, sortList.get(0).direction());
     assertEquals("field2", sortList.get(0).field());
     assertEquals(Sort.Direction.ASC, sortList.get(1).direction());
+    assertEquals("field1", sortList.get(1).field());
+  }
+
+  @Test
+  void testSorterParseSort_WithMultipleSortFields() {
+    List<Cursor.SortBy> sortList = sorter.parseSort("field2:DESC,field1:DESC");
+    assertEquals(2, sortList.size());
+    assertEquals(Sort.Direction.DESC, sortList.get(0).direction());
+    assertEquals("field2", sortList.get(0).field());
+    assertEquals(Sort.Direction.DESC, sortList.get(1).direction());
     assertEquals("field1", sortList.get(1).field());
   }
 
