@@ -23,6 +23,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *    private String declaredValueCurrency
  *  )
  * </pre></code></p>
+ *
+ * <p>Note this does not enforce that both field are either null or non-null, for that behaviour use {@literal @}AllOrNone</p>
  */
 @Repeatable(RequiredIfOther.List.class)
 @Target({TYPE_USE})

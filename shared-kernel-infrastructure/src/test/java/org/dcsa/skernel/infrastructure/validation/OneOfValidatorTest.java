@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class RequiredIfOtherValidatorTest {
+public class OneOfValidatorTest {
   private ValidatorFactory validatorFactory;
 
   @BeforeAll
@@ -29,34 +29,35 @@ public class RequiredIfOtherValidatorTest {
   }
 
   @Test
-  public void testBothFieldsAreNull() {
-    assertTrue(validate(new TestRecord(null, null)).isEmpty());
+  public void testOneFieldIsSet() {
+    assertTrue(validate(new TestRecord("", null, null)).isEmpty());
+    assertTrue(validate(new TestRecord(null, "", null)).isEmpty());
+    assertTrue(validate(new TestRecord(null, null, "")).isEmpty());
   }
 
   @Test
-  public void testBothFieldsAreSet() {
-    assertTrue(validate(new TestRecord(3.14f, "DKK")).isEmpty());
+  public void testViolations() {
+    testViolation(new TestRecord("", "", ""));
+    testViolation(new TestRecord(null, "", ""));
+    testViolation(new TestRecord("", null, ""));
+    testViolation(new TestRecord("", "", null));
+    testViolation(new TestRecord(null, null, null));
   }
 
-  @Test
-  public void testIfNotNullIsSet() {
-    Set<ConstraintViolation<TestRecord>> violations = validate(new TestRecord(3.14f, null));
+  private void testViolation(TestRecord record) {
+    Set<ConstraintViolation<TestRecord>> violations = validate(record);
     assertEquals(1, violations.size());
-    assertTrue(violations.stream().allMatch(v -> "if declaredValue is not null then declaredValueCurrency also must be not null".equals(v.getMessage())));
-  }
-
-  @Test
-  public void testThenNotNullIsSet() {
-    assertTrue(validate(new TestRecord(null, "DKK")).isEmpty());
+    assertTrue(violations.stream().allMatch(v -> "exactly one of [field1, field2, field3] must be non-null and the rest must be null".equals(v.getMessage())));
   }
 
   private <T> Set<ConstraintViolation<T>> validate(T value) {
     return validatorFactory.getValidator().validate(value);
   }
 
-  @RequiredIfOther(ifNotNull = "declaredValue", thenNotNull = "declaredValueCurrency")
+  @OneOf({"field1", "field2", "field3"})
   public record TestRecord(
-    Float declaredValue,
-    String declaredValueCurrency
+    String field1,
+    String field2,
+    String field3
   ) { }
 }

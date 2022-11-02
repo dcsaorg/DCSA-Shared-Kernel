@@ -24,6 +24,7 @@ public class RequiredIfTrueValidatorTest {
         Assertions.assertTrue(validate(RequiredIfTrueDefaults.of(false, true)));
         Assertions.assertTrue(validate(RequiredIfTrueDefaults.of(false, new boolean[] { true, false })));
         Assertions.assertTrue(validate(RequiredIfTrueDefaults.of(false, null)));
+        Assertions.assertTrue(validate(RequiredIfTrueDefaults.of(null, null)));
 
         // Invalid
         Assertions.assertFalse(validate(RequiredIfTrueDefaults.of(true, null)));
