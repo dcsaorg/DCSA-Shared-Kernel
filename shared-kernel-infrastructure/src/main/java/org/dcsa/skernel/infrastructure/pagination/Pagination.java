@@ -57,20 +57,20 @@ public class Pagination {
   }
   public interface AcceptSortParameters {
     /**
-     * Sets the sort to the specified order.
+     * <p>Sets the sort to the specified order.</p>
      *
-     * Note the defaultSort is assumed to contain at least one field that is reasonable unique as to give a stable
-     * result.
+     * <p><b>Note the defaultSort is assumed to contain at least one field that is reasonable unique as to give a stable
+     * result.</b></p>
      */
     DoPaginate sortBy(List<Sort.Order> defaultSort);
 
     /**
-     * Sets the sort to the order specified in "sort" and defaulting to "defaultSort" if "sort" is null.
+     * <p>Sets the sort to the order specified in "sort" and defaulting to "defaultSort" if "sort" is null.
      * The incoming "sort" parameter is parsed with the format of 'field:direction' e.g. date:ASC or e.g.
-     * date:ASC,reference:DESC.
+     * date:ASC,reference:DESC.</p>
      *
-     * Note the defaultSort is assumed to contain at least one field that is reasonable unique as to give a stable
-     * result.
+     * <p><b>Note the defaultSort is assumed to contain at least one field that is reasonable unique as to give a stable
+     * result.</b></p>
      */
     DoPaginate sortBy(String sort, List<Sort.Order> defaultSort, SortableFields sortableFields);
   }

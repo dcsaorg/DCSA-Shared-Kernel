@@ -13,26 +13,26 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * <p><b>Class-level annotation only.</b></p>
  *
- * <p>Validates that of a set of fields either all are null or all are non-null.</p>
+ * <p>Validates that of a set of fields exactly one of them must be not-null.</p>
  *
  * <p>Example of usage:</p>
  * <p></p><code><pre>
- * {@literal @}AllOrNone({"declaredValue", "declaredValueCurrency" })
+ * {@literal @}OneOf({"field1", "field2" })
  *  public record Something (
- *    private Float declaredValue,
- *    private String declaredValueCurrency
+ *    private String field1,
+ *    private String field2
  *  )
  * </pre></code></p>
  */
-@Repeatable(AllOrNone.List.class)
+@Repeatable(OneOf.List.class)
 @Target({TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = AllOrNoneValidator.class)
-public @interface AllOrNone {
+@Constraint(validatedBy = OneOfValidator.class)
+public @interface OneOf {
   String[] value();
 
-  String message() default "all of {value} must be null or all must be non-null";
+  String message() default "exactly one of {value} must be non-null and the rest must be null";
 
   Class<?>[] groups() default {};
 
@@ -42,6 +42,6 @@ public @interface AllOrNone {
   @Retention(RUNTIME)
   @Documented
   @interface List {
-    AllOrNone[] value();
+    OneOf[] value();
   }
 }

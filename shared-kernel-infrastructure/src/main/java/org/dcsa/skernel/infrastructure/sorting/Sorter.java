@@ -79,11 +79,11 @@ public class Sorter {
   }
 
   /**
-   * Parses the incoming sort parameter with the format of 'field:direction' e.g. date:ASC or e.g.
-   * date:ASC,reference:DESC into a Sort.Order used by Spring.
+   * <p>Parses the incoming sort parameter with the format of 'field:direction' e.g. date:ASC or e.g.
+   * date:ASC,reference:DESC into a Sort.Order used by Spring.</p>
    *
-   * Note the defaultSort is assumed to contain at least one field that is reasonable unique as to give a stable
-   * result.
+   * <p><b>Note the defaultSort is assumed to contain at least one field that is reasonable unique as to give a stable
+   * result.</b></p>
    */
   public static List<Sort.Order> parseSort(String sort, List<Sort.Order> defaultSort, SortableFields sortableFields) {
     return parseSort(sort, defaultSort, sortableFields.sortableFields, Sort.Order::new, Sort.Order::getProperty);
@@ -95,7 +95,7 @@ public class Sorter {
       return defaultSort;
     }
 
-    Set<String> addedFields = new HashSet();
+    Set<String> addedFields = new HashSet<>();
     List<T> result = Arrays.stream(sort.split(","))
       .map(String::trim)
       .map(

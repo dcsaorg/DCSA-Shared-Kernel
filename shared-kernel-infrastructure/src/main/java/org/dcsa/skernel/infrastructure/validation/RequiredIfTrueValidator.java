@@ -67,9 +67,7 @@ public class RequiredIfTrueValidator implements ConstraintValidator<RequiredIfTr
   }
 
   //   Helper to deal compiler warnings about unchecked casts.
-  private static <T> T cast(Object value) {
-    @SuppressWarnings("unchecked")
-    T t = (T) value;
-    return t;
+  private static boolean cast(Object value) {
+    return value != null && (Boolean) value;
   }
 }
