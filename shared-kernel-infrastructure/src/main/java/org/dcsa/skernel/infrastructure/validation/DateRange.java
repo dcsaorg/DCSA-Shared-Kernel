@@ -3,6 +3,7 @@ package org.dcsa.skernel.infrastructure.validation;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -18,6 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *     <li>(optionally) at least start date <i>OR</i> end date is given. Combine with @{@link javax.validation.constraints.NotNull} as needed</li>
  * </ul>
  */
+@Repeatable(DateRange.List.class)
 @Target({TYPE})
 @Retention(RUNTIME)
 @Documented
@@ -73,5 +75,12 @@ public @interface DateRange {
   enum NullHandling {
     AT_LEAST_ONE_MUST_BE_NONNULL,
     BOTH_CAN_BE_NULL,
+  }
+
+  @Target({TYPE})
+  @Retention(RUNTIME)
+  @Documented
+  @interface List {
+    DateRange[] value();
   }
 }
