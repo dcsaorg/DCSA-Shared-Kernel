@@ -22,6 +22,7 @@ public class ConcreteRequestErrorMessageExceptionHandler extends BaseExceptionHa
   @ExceptionHandler(ConcreteRequestErrorMessageException.class)
   public ResponseEntity<RequestFailureTO> handleConcreteRequestErrorMessageException(
     HttpServletRequest httpServletRequest, ConcreteRequestErrorMessageException e) {
+    log.debug("Exception {}: {}", e.getClass().getName(), e.getMessage());
 
     ResponseStatus responseStatusAnnotation = e.getClass().getAnnotation(ResponseStatus.class);
     HttpStatus httpStatus =
