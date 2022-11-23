@@ -10,10 +10,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.codec.DecodingException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -199,6 +203,35 @@ public class SpringExceptionHandler extends BaseExceptionHandler {
       httpServletRequest,
       HttpStatus.BAD_REQUEST,
       new ConcreteRequestErrorMessageTO("invalidInput", e.getMessage())
+    );
+  }
+
+  @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+  public ResponseEntity<RequestFailureTO> handleHttpMediaTypeNotSupportedException(
+    HttpServletRequest httpServletRequest, HttpMediaTypeNotSupportedException e) {
+    log.debug("Exception {}: {}", e.getClass().getName(), e.getMessage());
+    return response(
+      httpServletRequest,
+      HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+      new ConcreteRequestErrorMessageTO("unsupported media type", e.getMessage())
+    );
+  }
+
+  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  public ResponseEntity<RequestFailureTO> handleHttpRequestMethodNotSupportedException(
+    HttpServletRequest httpServletRequest, HttpRequestMethodNotSupportedException e) {
+    log.debug("Exception {}: {}", e.getClass().getName(), e.getMessage());
+    MultiValueMap<String, String> headers = null;
+    String[] methods = e.getSupportedMethods();
+    if (methods != null) {
+      headers = new HttpHeaders();
+      headers.add("Allow", String.join(", ", methods));
+    }
+    return response(
+      httpServletRequest,
+      HttpStatus.METHOD_NOT_ALLOWED,
+      headers,
+      new ConcreteRequestErrorMessageTO("method not allowed", e.getMessage())
     );
   }
 }
