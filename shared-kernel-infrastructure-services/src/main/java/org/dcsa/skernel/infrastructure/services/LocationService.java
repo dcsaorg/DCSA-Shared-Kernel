@@ -7,11 +7,12 @@ import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.domain.persistence.repository.FacilityRepository;
 import org.dcsa.skernel.domain.persistence.repository.LocationRepository;
 import org.dcsa.skernel.domain.persistence.repository.UnLocationRepository;
-import org.dcsa.skernel.infrastructure.services.util.EnsureResolvable;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
+import org.dcsa.skernel.infrastructure.services.util.EnsureResolvable;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO.AddressLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO.FacilityLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.LocationTO.GeoLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO.UNLocationLocationTO;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,8 @@ public class LocationService extends EnsureResolvable<LocationTO, Location> {
       return ensureResolvable(unLocationLocationTO, mapper);
     } else if (locationTO instanceof FacilityLocationTO facilityLocationTO) {
       return ensureResolvable(facilityLocationTO, mapper);
+    } else if (locationTO instanceof LocationTO.GeoLocationTO geoLocationTO) {
+      return ensureResolvable(geoLocationTO, mapper);
     } else {
       throw ConcreteRequestErrorMessageException.internalServerError("Unable to resolve location of type "
         + locationTO.getClass().getSimpleName());
@@ -67,6 +70,22 @@ public class LocationService extends EnsureResolvable<LocationTO, Location> {
         );
       }
     });
+  }
+
+  protected <C> C ensureResolvable(GeoLocationTO geoLocationTO, BiFunction<Location, Boolean, C> mapper) {
+    return ensureResolvable(
+      locationRepository.findByLocationNameAndLatitudeAndLongitude(
+        geoLocationTO.locationName(),
+        geoLocationTO.latitude(),
+        geoLocationTO.longitude()
+      ),
+      () -> locationRepository.save(Location.builder()
+        .locationName(geoLocationTO.locationName())
+        .latitude(geoLocationTO.latitude())
+        .latitude(geoLocationTO.longitude())
+        .build()),
+      mapper
+    );
   }
 
   private <C> C ensureResolvable(UNLocationLocationTO locationTO, BiFunction<Location, Boolean, C> mapper) {

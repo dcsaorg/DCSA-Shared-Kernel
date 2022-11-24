@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO.AddressLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO.FacilityLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.LocationTO.GeoLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO.UNLocationLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.enums.FacilityCodeListProvider;
 import org.dcsa.skernel.infrastructure.transferobject.jackson.LocationTODeserializer;
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @JsonDeserialize(using = LocationTODeserializer.class)
-public sealed interface LocationTO permits AddressLocationTO, FacilityLocationTO, UNLocationLocationTO {
+public sealed interface LocationTO permits AddressLocationTO, FacilityLocationTO, UNLocationLocationTO, GeoLocationTO {
   @Size(max = 100)
   String locationName();
 
@@ -38,6 +39,14 @@ public sealed interface LocationTO permits AddressLocationTO, FacilityLocationTO
    */
   static UNLocationLocationTO.UNLocationLocationTOBuilder unLocationLocationBuilder() {
     return UNLocationLocationTO.builder();
+  }
+
+
+  /**
+   * Shortcut for creating a builder for a LocationTO of type GeoLocationTO.
+   */
+  static GeoLocationTO.GeoLocationTOBuilder geoLocationBuilder() {
+    return GeoLocationTO.builder();
   }
 
   record AddressLocationTO(
@@ -80,4 +89,20 @@ public sealed interface LocationTO permits AddressLocationTO, FacilityLocationTO
     @Builder(toBuilder = true)
     public FacilityLocationTO { }
   }
+
+
+  record GeoLocationTO(
+    @Size(max = 100)
+    String locationName,
+
+    @NotBlank @Size(max = 11)
+    String latitude,
+
+    @NotBlank @Size(max = 11)
+    String longitude
+  ) implements LocationTO {
+    @Builder(toBuilder = true)
+    public GeoLocationTO { }
+  }
+
 }

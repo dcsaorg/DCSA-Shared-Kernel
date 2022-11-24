@@ -18,4 +18,6 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
   List<Location> findByLocationNameAndUNLocationCode(String locationName, String UNLocationCode);
 
   List<Location> findByLocationNameAndAddress(String locationName, Address address);
+
+  List<Location> findByLocationNameAndLatitudeAndLongitude(String locationName, String latitude, String longitude);
 }

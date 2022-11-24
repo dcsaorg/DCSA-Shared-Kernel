@@ -83,7 +83,7 @@ public class LocationMapperTest {
   @Test
   public void testBadFacilityLocation() {
     // Setup
-    Location location =Location.builder()
+    Location location = Location.builder()
       .locationName(FacilityDataFactory.NAME)
       .UNLocationCode(FacilityDataFactory.UNLOCATION_CODE)
       .facility(Facility.builder()
