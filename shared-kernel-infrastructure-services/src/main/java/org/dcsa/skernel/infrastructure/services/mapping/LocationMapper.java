@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dcsa.skernel.domain.persistence.entity.Facility;
 import org.dcsa.skernel.domain.persistence.entity.Location;
+import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.enums.FacilityCodeListProvider;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -48,8 +50,15 @@ public class LocationMapper {
         .locationName(location.getLocationName())
         .UNLocationCode(location.getUNLocationCode())
         .build();
+    } else if (location.getLatitude() != null && location.getLongitude() != null) {
+      return LocationTO.geoLocationBuilder()
+        .locationName(location.getLocationName())
+        .latitude(location.getLatitude())
+        .longitude(location.getLongitude())
+        .build();
     } else {
-      throw new IllegalArgumentException("Location '" + location.getId() + "' has neither address, facility nor unLocation");
+      throw new IllegalArgumentException("Location '" + location.getId()
+        + "' has neither address, facility, unLocation nor geo coordinates");
     }
   }
 }
