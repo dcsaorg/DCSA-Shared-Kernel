@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -92,7 +93,7 @@ public class SpringExceptionHandler extends BaseExceptionHandler {
 
     List<ConcreteRequestErrorMessageTO> errors =
       e.getBindingResult().getAllErrors().stream()
-        .map(error -> new ConcreteRequestErrorMessageTO(((FieldError) error).getField(), error.getDefaultMessage()))
+        .map(this::mapObjectError)
         .toList();
 
     return response(
@@ -100,6 +101,13 @@ public class SpringExceptionHandler extends BaseExceptionHandler {
       HttpStatus.BAD_REQUEST,
       errors
     );
+  }
+
+  private ConcreteRequestErrorMessageTO mapObjectError(ObjectError objectError) {
+    if (objectError instanceof FieldError fieldError) {
+      return new ConcreteRequestErrorMessageTO(fieldError.getField(), fieldError.getDefaultMessage());
+    }
+    return new ConcreteRequestErrorMessageTO(objectError.getObjectName(), objectError.getDefaultMessage());
   }
 
   @ExceptionHandler(ServerWebInputException.class)
