@@ -82,7 +82,7 @@ public class LocationService extends EnsureResolvable<LocationTO, Location> {
       () -> locationRepository.save(Location.builder()
         .locationName(geoLocationTO.locationName())
         .latitude(geoLocationTO.latitude())
-        .latitude(geoLocationTO.longitude())
+        .longitude(geoLocationTO.longitude())
         .build()),
       mapper
     );
