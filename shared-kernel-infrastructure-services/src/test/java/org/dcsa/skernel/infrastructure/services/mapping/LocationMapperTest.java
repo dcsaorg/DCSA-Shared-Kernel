@@ -4,10 +4,10 @@ import org.dcsa.skernel.domain.persistence.entity.Facility;
 import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.infrastructure.services.datafactories.FacilityDataFactory;
 import org.dcsa.skernel.infrastructure.services.datafactories.LocationDataFactory;
+import org.dcsa.skernel.infrastructure.transferobject.AddressLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.FacilityLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.AddressLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.FacilityLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.UNLocationLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.UNLocationLocationTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -17,10 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class LocationMapperTest {
@@ -54,6 +51,7 @@ public class LocationMapperTest {
     LocationTO actual = locationMapper.toDTO(location);
 
     // Verify
+    assertTrue(actual.isFacility());
     assertInstanceOf(FacilityLocationTO.class, actual);
     assertEquals(LocationDataFactory.facilityLocationTO(), actual);
   }

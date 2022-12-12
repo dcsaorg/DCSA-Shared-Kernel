@@ -9,11 +9,7 @@ import org.dcsa.skernel.domain.persistence.repository.LocationRepository;
 import org.dcsa.skernel.domain.persistence.repository.UnLocationRepository;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.skernel.infrastructure.services.util.EnsureResolvable;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.AddressLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.FacilityLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.GeoLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.UNLocationLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,14 +35,16 @@ public class LocationService extends EnsureResolvable<LocationTO, Location> {
   public <C> C ensureResolvable(LocationTO locationTO, BiFunction<Location, Boolean, C> mapper) {
     if (locationTO == null) {
       return mapper.apply(null, false);
-    } else if (locationTO instanceof AddressLocationTO addressLocationTO) {
-      return ensureResolvable(addressLocationTO, mapper);
-    } else if (locationTO instanceof UNLocationLocationTO unLocationLocationTO) {
-      return ensureResolvable(unLocationLocationTO, mapper);
-    } else if (locationTO instanceof FacilityLocationTO facilityLocationTO) {
-      return ensureResolvable(facilityLocationTO, mapper);
-    } else if (locationTO instanceof LocationTO.GeoLocationTO geoLocationTO) {
-      return ensureResolvable(geoLocationTO, mapper);
+    } else if (locationTO.isAddress() && locationTO.isUNLocation()) {
+      return ensureResolvableUNLocationAndAddress( locationTO, mapper);
+    } else if (locationTO.isAddress()) {
+      return ensureResolvable((AddressLocationTO) locationTO, mapper);
+    } else if (locationTO.isUNLocation()) {
+      return ensureResolvable((UNLocationLocationTO) locationTO, mapper);
+    } else if (locationTO.isFacility()) {
+      return ensureResolvable((FacilityLocationTO) locationTO, mapper);
+    } else if (locationTO.isGeoLocation()) {
+      return ensureResolvable((GeoLocationTO) locationTO, mapper);
     } else {
       throw ConcreteRequestErrorMessageException.internalServerError("Unable to resolve location of type "
         + locationTO.getClass().getSimpleName());
@@ -89,9 +87,7 @@ public class LocationService extends EnsureResolvable<LocationTO, Location> {
   }
 
   private <C> C ensureResolvable(UNLocationLocationTO locationTO, BiFunction<Location, Boolean, C> mapper) {
-    unLocationRepository.findById(locationTO.UNLocationCode())
-      .orElseThrow(() -> ConcreteRequestErrorMessageException.notFound(
-        "No UNLocation found for UNLocationCode = '" + locationTO.UNLocationCode() + "'"));
+    resolveUNLocation(locationTO);
 
     return ensureResolvable(
       locationRepository.findByLocationNameAndUNLocationCode(locationTO.locationName(), locationTO.UNLocationCode()),
@@ -100,6 +96,12 @@ public class LocationService extends EnsureResolvable<LocationTO, Location> {
         .UNLocationCode(locationTO.UNLocationCode())
         .build()),
       mapper);
+  }
+
+  private void resolveUNLocation(UNLocationLocationTO locationTO) {
+    unLocationRepository.findById(locationTO.UNLocationCode())
+      .orElseThrow(() -> ConcreteRequestErrorMessageException.notFound(
+        "No UNLocation found for UNLocationCode = '" + locationTO.UNLocationCode() + "'"));
   }
 
   private <C> C ensureResolvable(FacilityLocationTO locationTO, BiFunction<Location, Boolean, C> mapper) {
@@ -120,5 +122,31 @@ public class LocationService extends EnsureResolvable<LocationTO, Location> {
         .build()),
       mapper
       );
+  }
+
+  private <C> C ensureResolvableUNLocationAndAddress(LocationTO locationTO, BiFunction<Location, Boolean, C> mapper) {
+    resolveUNLocation(locationTO);
+    Function<Address, Location> creator =
+        address ->
+            locationRepository.save(
+                Location.builder()
+                    .locationName(locationTO.locationName())
+                    .address(address)
+                    .UNLocationCode(locationTO.UNLocationCode())
+                    .build());
+
+    return addressService.ensureResolvable(
+        locationTO.address(),
+        (Address address, Boolean isAddressNew) -> {
+          if (isAddressNew) {
+            return mapper.apply(creator.apply(address), true);
+          } else {
+            return ensureResolvable(
+                locationRepository.findByLocationNameAndAddressAndUNLocationCode(
+                    locationTO.locationName(), address, locationTO.UNLocationCode()),
+                () -> creator.apply(address),
+                mapper);
+          }
+        });
   }
 }

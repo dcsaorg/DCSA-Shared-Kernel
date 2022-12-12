@@ -22,39 +22,9 @@ public class LocationTODeserializer extends StdDeserializer<LocationTO> {
 
   @Override
   public LocationTO deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
-    CombinedLocation combinedLocation = jp.readValueAs(CombinedLocation.class);
-    if (!combinedLocation.isValidLocation()) {
-      throw new IllegalArgumentException(
-        "Invalid json, the provided location is not valid (i.e., it matches 0 or 2+ location types at the same time)");
-    }
-    if (combinedLocation.isAddress()) {
-      return LocationTO.addressLocationBuilder()
-        .locationName(combinedLocation.locationName)
-        .address(combinedLocation.address)
-        .build();
-    } else if (combinedLocation.isFacility()) {
-      return LocationTO.facilityLocationBuilder()
-        .locationName(combinedLocation.locationName)
-        .facilityCode(combinedLocation.facilityCode)
-        .facilityCodeListProvider(combinedLocation.facilityCodeListProvider)
-        .UNLocationCode(combinedLocation.UNLocationCode())
-        .build();
-    } else if (combinedLocation.isUNLocation()) {
-      return LocationTO.unLocationLocationBuilder()
-        .locationName(combinedLocation.locationName)
-        .UNLocationCode(combinedLocation.UNLocationCode())
-        .build();
-    } else if (combinedLocation.isGeoLocation()) {
-      return LocationTO.geoLocationBuilder()
-        .locationName(combinedLocation.locationName)
-        .latitude(combinedLocation.latitude)
-        .longitude(combinedLocation.longitude)
-        .build();
-    } else {
       throw ConcreteRequestErrorMessageException.internalServerError(
         "Missing case for a new location type or CombinedLocation.isValidLocation() is wrong"
       );
-    }
   }
 
   private record CombinedLocation(

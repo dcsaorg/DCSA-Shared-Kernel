@@ -2,25 +2,25 @@ package org.dcsa.skernel.infrastructure.services.datafactories;
 
 import lombok.experimental.UtilityClass;
 import org.dcsa.skernel.domain.persistence.entity.Location;
+import org.dcsa.skernel.infrastructure.transferobject.AddressLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.FacilityLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.AddressLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.FacilityLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.UNLocationLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.UNLocationLocationTO;
 import org.dcsa.skernel.infrastructure.transferobject.enums.FacilityCodeListProvider;
 
 import java.util.UUID;
 
 @UtilityClass
 public class LocationDataFactory {
-  public static AddressLocationTO addressLocationTO() {
-    return LocationTO.addressLocationBuilder()
+  public static LocationTO addressLocationTO() {
+    return LocationTO.builder()
       .locationName("Asseco DK office")
       .address(AddressDataFactory.addressTO())
       .build();
   }
 
-  public static FacilityLocationTO facilityLocationTO() {
-    return LocationTO.facilityLocationBuilder()
+  public static LocationTO facilityLocationTO() {
+    return LocationTO.builder()
       .locationName(FacilityDataFactory.NAME)
       .UNLocationCode(FacilityDataFactory.UNLOCATION_CODE)
       .facilityCode(FacilityDataFactory.SMDG_CODE)
@@ -28,9 +28,17 @@ public class LocationDataFactory {
       .build();
   }
 
-  public static UNLocationLocationTO unLocationLocationTO() {
-    return LocationTO.unLocationLocationBuilder()
+  public static LocationTO unLocationLocationTO() {
+    return LocationTO.builder()
       .locationName("Rotterdam UNLocation")
+      .UNLocationCode("NLRTM")
+      .build();
+  }
+
+  public static LocationTO unLocationLocationTOWithAddressTO() {
+    return LocationTO.builder()
+      .locationName("Asseco DK office")
+      .address(AddressDataFactory.addressTO())
       .UNLocationCode("NLRTM")
       .build();
   }
@@ -77,6 +85,14 @@ public class LocationDataFactory {
   public static Location unLocationLocationWithId() {
     return unLocationLocationBuilder()
       .id(UUID.fromString("b93a351e-0ccb-4b99-bc0b-7e9439fdaea1"))
+      .build();
+  }
+
+  public static Location unLocationLocationAndAddressLocationWithId() {
+    return unLocationLocationBuilder()
+      .locationName("Asseco DK office")
+      .address(AddressDataFactory.addressWithId())
+      .id(UUID.fromString("b93a351e-0ccb-4b99-bc0b-7e9439fdaea2"))
       .build();
   }
 
