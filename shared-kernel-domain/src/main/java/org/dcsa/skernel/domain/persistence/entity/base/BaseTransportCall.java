@@ -1,6 +1,7 @@
 package org.dcsa.skernel.domain.persistence.entity.base;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.domain.persistence.entity.enums.FacilityTypeCode;
 import org.dcsa.skernel.domain.persistence.entity.enums.PortCallStatusCode;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @MappedSuperclass
 @Table(name = "transport_call")
 @EqualsAndHashCode
-@Builder
+@SuperBuilder
 @Setter(value = AccessLevel.PROTECTED)
 @Getter
 public class BaseTransportCall {
