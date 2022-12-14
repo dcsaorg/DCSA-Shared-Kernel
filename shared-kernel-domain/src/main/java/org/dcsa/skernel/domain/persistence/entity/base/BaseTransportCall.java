@@ -23,6 +23,8 @@ import java.util.UUID;
 @Table(name = "transport_call")
 @EqualsAndHashCode
 @SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter(value = AccessLevel.PROTECTED)
 @Getter
 public class BaseTransportCall {
