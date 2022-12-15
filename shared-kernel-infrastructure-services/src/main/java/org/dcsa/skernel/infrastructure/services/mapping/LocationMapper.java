@@ -19,15 +19,10 @@ public class LocationMapper {
       return null;
     }
 
-    if (location.getAddress() != null) {
-      return LocationTO.addressLocationBuilder()
-        .locationName(location.getLocationName())
-        .address(addressMapper.toDTO(location.getAddress()))
-        .build();
-    } else if (location.getFacility() != null) {
+    String facilityCode = null;
+    FacilityCodeListProvider facilityCodeListProvider = null;
+    if (location.getFacility() != null) {
       Facility facility = location.getFacility();
-      String facilityCode;
-      FacilityCodeListProvider facilityCodeListProvider;
       if (facility.getFacilitySMDGCode() != null) {
         facilityCode = facility.getFacilitySMDGCode();
         facilityCodeListProvider = FacilityCodeListProvider.SMDG;
@@ -35,28 +30,18 @@ public class LocationMapper {
         facilityCode = facility.getFacilityBICCode();
         facilityCodeListProvider = FacilityCodeListProvider.BIC;
       } else {
-        throw new IllegalArgumentException("Facility '" + facility.getId()+ "' has neither SMDG code nor BIC code");
+        throw new IllegalArgumentException("Facility '" + facility.getId() + "' has neither SMDG code nor BIC code");
       }
-      return LocationTO.facilityLocationBuilder()
-        .locationName(location.getLocationName())
-        .UNLocationCode(location.getUNLocationCode())
-        .facilityCode(facilityCode)
-        .facilityCodeListProvider(facilityCodeListProvider)
-        .build();
-    } else if (location.getUNLocationCode() != null) {
-      return LocationTO.unLocationLocationBuilder()
-        .locationName(location.getLocationName())
-        .UNLocationCode(location.getUNLocationCode())
-        .build();
-    } else if (location.getLatitude() != null && location.getLongitude() != null) {
-      return LocationTO.geoLocationBuilder()
-        .locationName(location.getLocationName())
-        .latitude(location.getLatitude())
-        .longitude(location.getLongitude())
-        .build();
-    } else {
-      throw new IllegalArgumentException("Location '" + location.getId()
-        + "' has neither address, facility, unLocation nor geo coordinates");
     }
+
+    return LocationTO.builder()
+      .locationName(location.getLocationName())
+      .address(addressMapper.toDTO(location.getAddress()))
+      .UNLocationCode(location.getUNLocationCode())
+      .facilityCode(facilityCode)
+      .facilityCodeListProvider(facilityCodeListProvider)
+      .latitude(location.getLatitude())
+      .longitude(location.getLongitude())
+      .build();
   }
 }
