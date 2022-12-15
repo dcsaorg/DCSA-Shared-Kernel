@@ -1,7 +1,6 @@
 package org.dcsa.skernel.infrastructure.services;
 
 import org.dcsa.skernel.domain.persistence.entity.Address;
-import org.dcsa.skernel.domain.persistence.entity.Facility;
 import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.domain.persistence.entity.UnLocation;
 import org.dcsa.skernel.domain.persistence.repository.FacilityRepository;
@@ -11,15 +10,14 @@ import org.dcsa.skernel.infrastructure.services.datafactories.AddressDataFactory
 import org.dcsa.skernel.infrastructure.services.datafactories.LocationDataFactory;
 import org.dcsa.skernel.errors.exceptions.NotFoundException;
 import org.dcsa.skernel.infrastructure.transferobject.AddressTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.AddressLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.FacilityLocationTO;
-import org.dcsa.skernel.infrastructure.transferobject.LocationTO.UNLocationLocationTO;
+import org.dcsa.skernel.infrastructure.transferobject.LocationTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Example;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +57,7 @@ public class LocationServiceTest {
   @Test
   public void testAddressLocation_AddressNew() {
     // Setup
-    AddressLocationTO locationTO = LocationDataFactory.addressLocationTO();
+    LocationTO locationTO = LocationDataFactory.addressLocationTO();
     Location location = LocationDataFactory.addressLocationWithId();
 
     when(addressService.ensureResolvable(any(AddressTO.class), any(BiFunction.class)))
@@ -75,14 +73,14 @@ public class LocationServiceTest {
     // Verify
     assertEquals(location, actual);
     verify(addressService).ensureResolvable(eq(locationTO.address()), any(BiFunction.class));
-    verify(locationRepository, never()).findByLocationNameAndAddress(anyString(), any(Address.class));
+    verify(locationRepository, never()).findAll(any(Example.class));
     verify(locationRepository).save(LocationDataFactory.addressLocationWithoutId());
   }
 
   @Test
   public void testAddressLocation_AddressExisting_LocationNotFound() {
     // Setup
-    AddressLocationTO locationTO = LocationDataFactory.addressLocationTO();
+    LocationTO locationTO = LocationDataFactory.addressLocationTO();
     Location location = LocationDataFactory.addressLocationWithId();
 
     when(addressService.ensureResolvable(any(AddressTO.class), any(BiFunction.class)))
@@ -90,7 +88,7 @@ public class LocationServiceTest {
       BiFunction<Address, Boolean, Location> mapper = invocation.getArgument(1);
       return mapper.apply(AddressDataFactory.addressWithId(), false);
     });
-    when(locationRepository.findByLocationNameAndAddress(anyString(), any(Address.class))).thenReturn(Collections.emptyList());
+    when(locationRepository.findAll(any(Example.class))).thenReturn(Collections.emptyList());
     when(locationRepository.save(any(Location.class))).thenReturn(location);
 
     // Execute
@@ -99,14 +97,14 @@ public class LocationServiceTest {
     // Verify
     assertEquals(location, actual);
     verify(addressService).ensureResolvable(eq(locationTO.address()), any(BiFunction.class));
-    verify(locationRepository).findByLocationNameAndAddress(locationTO.locationName(), location.getAddress());
+    verify(locationRepository).findAll(any(Example.class));
     verify(locationRepository).save(LocationDataFactory.addressLocationWithoutId());
   }
 
   @Test
   public void testAddressLocation_AddressExisting_LocationFound() {
     // Setup
-    AddressLocationTO locationTO = LocationDataFactory.addressLocationTO();
+    LocationTO locationTO = LocationDataFactory.addressLocationTO();
     Location location = LocationDataFactory.addressLocationWithId();
 
     when(addressService.ensureResolvable(any(AddressTO.class), any(BiFunction.class)))
@@ -114,7 +112,7 @@ public class LocationServiceTest {
       BiFunction<Address, Boolean, Location> mapper = invocation.getArgument(1);
       return mapper.apply(AddressDataFactory.addressWithId(), false);
     });
-    when(locationRepository.findByLocationNameAndAddress(anyString(), any(Address.class))).thenReturn(List.of(location));
+    when(locationRepository.findAll(any(Example.class))).thenReturn(List.of(location));
 
     // Execute
     Location actual = locationService.ensureResolvable(locationTO);
@@ -122,14 +120,14 @@ public class LocationServiceTest {
     // Verify
     assertEquals(location, actual);
     verify(addressService).ensureResolvable(eq(locationTO.address()), any(BiFunction.class));
-    verify(locationRepository).findByLocationNameAndAddress(locationTO.locationName(), location.getAddress());
+    verify(locationRepository).findAll(any(Example.class));
     verify(locationRepository, never()).save(any(Location.class));
   }
 
   @Test
   public void testUNLocation_UNLocationNotFound() {
     // Setup
-    UNLocationLocationTO locationTO = LocationDataFactory.unLocationLocationTO();
+    LocationTO locationTO = LocationDataFactory.unLocationLocationTO();
     when(unLocationRepository.findById(anyString())).thenReturn(Optional.empty());
 
     // Execute/Verify
@@ -140,12 +138,14 @@ public class LocationServiceTest {
   @Test
   public void testUNLocation_UNLocationFound_LocationNotFound() {
     // Setup
-    UNLocationLocationTO locationTO = LocationDataFactory.unLocationLocationTO();
+    LocationTO locationTO = LocationDataFactory.unLocationLocationTO();
     Location location = LocationDataFactory.unLocationLocationWithId();
 
-    when(unLocationRepository.findById(anyString())).thenReturn(Optional.of(UnLocation.builder().build()));
-    when(locationRepository.findByLocationNameAndUNLocationCode(anyString(), anyString())).thenReturn(Collections.emptyList());
+    when(unLocationRepository.findById(anyString())).thenReturn(
+      Optional.of(UnLocation.builder().unLocationCode(locationTO.UNLocationCode()).build()));
+    when(locationRepository.findAll(any(Example.class))).thenReturn(Collections.emptyList());
     when(locationRepository.save(any(Location.class))).thenReturn(location);
+    mockNullAddress();
 
     // Execute
     Location actual = locationService.ensureResolvable(locationTO);
@@ -153,18 +153,20 @@ public class LocationServiceTest {
     // Verify
     assertEquals(location, actual);
     verify(unLocationRepository).findById(locationTO.UNLocationCode());
-    verify(locationRepository).findByLocationNameAndUNLocationCode(locationTO.locationName(), locationTO.UNLocationCode());
+    verify(locationRepository).findAll(any(Example.class));
     verify(locationRepository).save(LocationDataFactory.unLocationLocationWithoutId());
   }
 
   @Test
   public void testUNLocation_UNLocationFound_LocationFound() {
     // Setup
-    UNLocationLocationTO locationTO = LocationDataFactory.unLocationLocationTO();
+    LocationTO locationTO = LocationDataFactory.unLocationLocationTO();
     Location location = LocationDataFactory.unLocationLocationWithId();
 
-    when(unLocationRepository.findById(anyString())).thenReturn(Optional.of(UnLocation.builder().build()));
-    when(locationRepository.findByLocationNameAndUNLocationCode(anyString(), anyString())).thenReturn(List.of(location));
+    when(unLocationRepository.findById(anyString())).thenReturn(
+      Optional.of(UnLocation.builder().unLocationCode(locationTO.UNLocationCode()).build()));
+    when(locationRepository.findAll(any(Example.class))).thenReturn(List.of(location));
+    mockNullAddress();
 
     // Execute
     Location actual = locationService.ensureResolvable(locationTO);
@@ -172,14 +174,14 @@ public class LocationServiceTest {
     // Verify
     assertEquals(location, actual);
     verify(unLocationRepository).findById(locationTO.UNLocationCode());
-    verify(locationRepository).findByLocationNameAndUNLocationCode(locationTO.locationName(), locationTO.UNLocationCode());
+    verify(locationRepository).findAll(any(Example.class));
     verify(locationRepository, never()).save(any(Location.class));
   }
 
   @Test
   public void testFacilityLocation_FacilityNotFound() {
     // Setup
-    FacilityLocationTO locationTO = LocationDataFactory.facilityLocationTO();
+    LocationTO locationTO = LocationDataFactory.facilityLocationTO();
     when(facilityRepository.findByUNLocationCodeAndFacilitySMDGCode(anyString(), anyString())).thenReturn(Optional.empty());
 
     // Execute/Verify
@@ -190,12 +192,13 @@ public class LocationServiceTest {
   @Test
   public void testFacilityLocation_FacilityFound_LocationNotFound() {
     // Setup
-    FacilityLocationTO locationTO = LocationDataFactory.facilityLocationTO();
+    LocationTO locationTO = LocationDataFactory.facilityLocationTO();
     Location location = LocationDataFactory.facilityLocationWithId();
 
     when(facilityRepository.findByUNLocationCodeAndFacilitySMDGCode(anyString(), anyString())).thenReturn(Optional.of(location.getFacility()));
-    when(locationRepository.findByLocationNameAndFacilityAndUNLocationCode(anyString(), any(Facility.class), anyString())).thenReturn(Collections.emptyList());
+    when(locationRepository.findAll(any(Example.class))).thenReturn(Collections.emptyList());
     when(locationRepository.save(any(Location.class))).thenReturn(location);
+    mockNullAddress();
 
     // Execute
     Location actual = locationService.ensureResolvable(locationTO);
@@ -203,18 +206,19 @@ public class LocationServiceTest {
     // Verify
     assertEquals(location, actual);
     verify(facilityRepository).findByUNLocationCodeAndFacilitySMDGCode(locationTO.UNLocationCode(), locationTO.facilityCode());
-    verify(locationRepository).findByLocationNameAndFacilityAndUNLocationCode(locationTO.locationName(), location.getFacility(), locationTO.UNLocationCode());
+    verify(locationRepository).findAll(any(Example.class));
     verify(locationRepository).save(LocationDataFactory.facilityLocationWithoutId());
   }
 
   @Test
   public void testFacilityLocation_FacilityFound_LocationFound() {
     // Setup
-    FacilityLocationTO locationTO = LocationDataFactory.facilityLocationTO();
+    LocationTO locationTO = LocationDataFactory.facilityLocationTO();
     Location location = LocationDataFactory.facilityLocationWithId();
 
     when(facilityRepository.findByUNLocationCodeAndFacilitySMDGCode(anyString(), anyString())).thenReturn(Optional.of(location.getFacility()));
-    when(locationRepository.findByLocationNameAndFacilityAndUNLocationCode(anyString(), any(Facility.class), anyString())).thenReturn(List.of(location));
+    when(locationRepository.findAll(any(Example.class))).thenReturn(List.of(location));
+    mockNullAddress();
 
     // Execute
     Location actual = locationService.ensureResolvable(locationTO);
@@ -222,7 +226,16 @@ public class LocationServiceTest {
     // Verify
     assertEquals(location, actual);
     verify(facilityRepository).findByUNLocationCodeAndFacilitySMDGCode(locationTO.UNLocationCode(), locationTO.facilityCode());
-    verify(locationRepository).findByLocationNameAndFacilityAndUNLocationCode(locationTO.locationName(), location.getFacility(), locationTO.UNLocationCode());
+    verify(locationRepository).findAll(any(Example.class));
     verify(locationRepository, never()).save(any(Location.class));
+  }
+
+  private void mockNullAddress() {
+    when(addressService.ensureResolvable(eq(null), any(BiFunction.class)))
+      .thenAnswer(invocation -> {
+        BiFunction<Address, Boolean, Location> mapper = invocation.getArgument(1);
+        return mapper.apply(null, false);
+      });
+
   }
 }
