@@ -70,7 +70,7 @@ public class SecurityConfigProd {
             .and()
             .authorizeRequests();
 
-    authz.antMatchers(HttpMethod.GET, "/actuator/health").permitAll();
+    authz.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll();
 
     String endpoint = null;
     log.info("Security: auth enabled (dcsa.securityConfig.auth.enabled)");
@@ -79,9 +79,9 @@ public class SecurityConfigProd {
     if (!receiveNotificationEndpoint.equals("NONE")) {
       endpoint = receiveNotificationEndpoint.replaceAll("/++$", "") + "/receive/*";
       authz
-          .antMatchers(HttpMethod.POST, endpoint)
+          .requestMatchers(HttpMethod.POST, endpoint)
           .permitAll()
-          .antMatchers(HttpMethod.HEAD, endpoint)
+          .requestMatchers(HttpMethod.HEAD, endpoint)
           .permitAll();
 
       log.info("Security: receive endpoint \"" + endpoint + "\"");
