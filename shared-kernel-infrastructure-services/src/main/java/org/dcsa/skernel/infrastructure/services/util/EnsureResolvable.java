@@ -1,6 +1,6 @@
 package org.dcsa.skernel.infrastructure.services.util;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiFunction;

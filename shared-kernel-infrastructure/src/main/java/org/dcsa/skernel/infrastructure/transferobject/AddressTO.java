@@ -2,7 +2,7 @@ package org.dcsa.skernel.infrastructure.transferobject;
 
 import lombok.Builder;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 public record AddressTO(
   @Size(max = 100) String name,

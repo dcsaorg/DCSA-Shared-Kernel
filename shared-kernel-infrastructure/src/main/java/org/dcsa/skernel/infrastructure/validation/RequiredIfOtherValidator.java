@@ -3,8 +3,8 @@ package org.dcsa.skernel.infrastructure.validation;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class RequiredIfOtherValidator implements ConstraintValidator<RequiredIfOther, Object>  {
   private String ifNotNull;

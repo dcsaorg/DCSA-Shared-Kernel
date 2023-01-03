@@ -1,7 +1,7 @@
 package org.dcsa.skernel.infrastructure.util;
 
 
-import javax.el.MethodNotFoundException;
+import jakarta.el.MethodNotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

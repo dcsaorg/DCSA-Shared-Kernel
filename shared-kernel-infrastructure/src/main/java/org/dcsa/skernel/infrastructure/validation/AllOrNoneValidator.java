@@ -3,8 +3,8 @@ package org.dcsa.skernel.infrastructure.validation;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
 public class AllOrNoneValidator implements ConstraintValidator<AllOrNone, Object>  {

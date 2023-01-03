@@ -1,7 +1,7 @@
 package org.dcsa.skernel.infrastructure.validation;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Concretely, this can be used to validate that:
  * <ul>
  *     <li>the start date is before or (optionally) equal to the end date</li>
- *     <li>(optionally) at least start date <i>OR</i> end date is given. Combine with @{@link javax.validation.constraints.NotNull} as needed</li>
+ *     <li>(optionally) at least start date <i>OR</i> end date is given. Combine with @{@link jakarta.validation.constraints.NotNull} as needed</li>
  * </ul>
  */
 @Repeatable(DateRange.List.class)
@@ -49,7 +49,7 @@ public @interface DateRange {
    * least one of them is present.
    *
    * If you want to require one or both of the fields to be not null, then please
-   * use @{@link javax.validation.constraints.NotNull} on the relevant fields in
+   * use @{@link jakarta.validation.constraints.NotNull} on the relevant fields in
    * addition to this annotation.
    */
   NullHandling nullHandling() default NullHandling.BOTH_CAN_BE_NULL;

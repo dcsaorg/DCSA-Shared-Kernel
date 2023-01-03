@@ -9,15 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Order(1)
 @RestControllerAdvice
-public class JavaxValidationExceptionHandler extends BaseExceptionHandler {
+public class JakartaValidationExceptionHandler extends BaseExceptionHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<RequestFailureTO> handleConstraintViolationException(
     HttpServletRequest httpServletRequest, ConstraintViolationException e) {

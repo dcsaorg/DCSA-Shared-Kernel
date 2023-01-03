@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ServerWebInputException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @Order(1)
 @RestControllerAdvice
 public class SpringExceptionHandler extends BaseExceptionHandler {
-  private JavaxValidationExceptionHandler javaxValidationExceptionHandler = new JavaxValidationExceptionHandler();
+  private JakartaValidationExceptionHandler jakartaValidationExceptionHandler = new JakartaValidationExceptionHandler();
 
   @ExceptionHandler(InvalidDataAccessResourceUsageException.class)
   public ResponseEntity<RequestFailureTO> handleInvalidDataAccessResourceUsageException(
@@ -126,7 +126,7 @@ public class SpringExceptionHandler extends BaseExceptionHandler {
     } else if (e.getCause() instanceof DecodingException) {
       return handleDecodingException(httpServletRequest, (DecodingException) e.getCause());
     } else if (e.getCause() instanceof ConstraintViolationException) {
-      return javaxValidationExceptionHandler.handleConstraintViolationException(httpServletRequest, (ConstraintViolationException) e.getCause());
+      return jakartaValidationExceptionHandler.handleConstraintViolationException(httpServletRequest, (ConstraintViolationException) e.getCause());
     } else {
       log.debug("Exception {}: {}", e.getClass().getName(), e.getMessage());
       return response(
