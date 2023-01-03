@@ -56,7 +56,7 @@ public class ClaimsOneOfValueValidator implements OAuth2TokenValidator<Jwt> {
       // No requirements, then we accept
       return OAuth2TokenValidatorResult.success();
     }
-    if (!jwt.containsClaim(claimName) && !jwt.containsClaim("scope")) {
+    if (!jwt.hasClaim(claimName) && !jwt.hasClaim("scope")) {
       return missingClaim();
     }
     List<String> claimValues;
