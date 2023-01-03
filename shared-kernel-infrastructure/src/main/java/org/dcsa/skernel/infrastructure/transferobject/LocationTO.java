@@ -8,8 +8,10 @@ import org.dcsa.skernel.infrastructure.transferobject.enums.FacilityCodeListProv
 import org.dcsa.skernel.infrastructure.validation.AllOrNone;
 import org.dcsa.skernel.infrastructure.validation.AtLeast;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.function.Predicate;
 
 @AtLeast(

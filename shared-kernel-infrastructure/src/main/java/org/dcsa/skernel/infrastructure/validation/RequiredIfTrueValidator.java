@@ -2,9 +2,9 @@ package org.dcsa.skernel.infrastructure.validation;
 
 import org.dcsa.skernel.infrastructure.util.ReflectUtility;
 
-import javax.el.MethodNotFoundException;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.el.MethodNotFoundException;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 

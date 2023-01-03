@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ServerWebInputException;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class JavaxValidationExceptionHandlerTest extends BaseExceptionHandlerTest {
+public class JakartaValidationExceptionHandlerTest extends BaseExceptionHandlerTest {
   @Test
   @DisplayName("Test constraint violation with invalid input")
   void testConstraintViolationExceptionInputParameter() throws Exception {
@@ -79,6 +79,6 @@ public class JavaxValidationExceptionHandlerTest extends BaseExceptionHandlerTes
   }
 
   protected Object controllerAdvice() {
-    return new JavaxValidationExceptionHandler();
+    return new JakartaValidationExceptionHandler();
   }
 }
