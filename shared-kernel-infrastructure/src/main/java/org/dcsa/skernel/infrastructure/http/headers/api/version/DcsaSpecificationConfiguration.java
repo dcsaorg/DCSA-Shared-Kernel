@@ -15,6 +15,9 @@ import java.util.regex.Pattern;
 @Getter
 public class DcsaSpecificationConfiguration {
 
+  // Taken from https://semver.org/
+  static final Pattern SEM_VER_PATTERN = Pattern.compile("^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$");
+
   static final String UNOFFICIAL = "THIS-CONTEXT-PATH-IS-AN-UNOFFICIAL-API";
   static final Pattern CONTEXT_PREFIX_PATTERN = Pattern.compile(
     // Match with up to 5 leading contexts (to avoid a run-away regex).
@@ -26,6 +29,10 @@ public class DcsaSpecificationConfiguration {
   private List<PrefixSpecificationRule> byPrefix;
 
   private Map<String, String> byPrefixCache = Collections.emptyMap();
+
+  public void setVersion(String version) {
+    this.version = normalizedVersion(version);
+  }
 
   public void setByPrefix(List<PrefixSpecificationRule> byPrefix) {
     this.byPrefix = byPrefix;
@@ -48,7 +55,13 @@ public class DcsaSpecificationConfiguration {
           + " must follow the pattern /vX or /foo/vX (only major versions allowed!).  Offending prefix was \""
           + rule.prefix + "\"");
       }
-      String existing = byPrefixCache.put(rule.prefix, normalizedVersion(rule.version));
+      String normalizedVersion;
+      try {
+        normalizedVersion = normalizedVersion(rule.version);
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Invalid version for prefix " + rule.prefix);
+      }
+      String existing = byPrefixCache.put(rule.prefix, normalizedVersion);
       if (existing != null) {
         throw new IllegalArgumentException("Invalid configuration in dcsa.specification.by-prefix: Prefix \""
           + rule.prefix + "\" was used twice!");
@@ -65,7 +78,7 @@ public class DcsaSpecificationConfiguration {
     if (!byPrefixCache.isEmpty()) {
      return byPrefixCache.get(dcsaPathVersionPrefix);
     }
-    return normalizedVersion(version);
+    return version;
   }
 
   private static String normalizedVersion(String version) {
@@ -73,6 +86,11 @@ public class DcsaSpecificationConfiguration {
     // We might as well catch that and map it to UNOFFICIAL.
     if (version == null || "N/A".equals(version)) {
       return UNOFFICIAL;
+    }
+    if (!SEM_VER_PATTERN.matcher(version).matches()) {
+      // DDT-1438
+      throw new IllegalArgumentException("The version \"" + version
+        + "\" does not match the semver specification.  Alternatively, use \"N/A\" if it is an unofficial API.");
     }
     return version;
   }
