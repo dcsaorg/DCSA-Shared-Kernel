@@ -17,7 +17,7 @@
 	<description>Shared Kernel of entities for DCSA APIs</description>
 
 	<properties>
-		<revision>0.3.0</revision>
+		<revision>0.4.0</revision>
 		<sha1/>
 		<changelist>-SNAPSHOT</changelist>
 	</properties>
