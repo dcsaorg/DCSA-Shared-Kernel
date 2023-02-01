@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.dcsa</groupId>
 		<artifactId>dcsa-bom</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.5-RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -19,7 +19,7 @@
 	<properties>
 		<revision>0.3.0</revision>
 		<sha1/>
-		<changelist>-SNAPSHOT</changelist>
+		<changelist>-RELEASE</changelist>
 	</properties>
 
 	<dependencies>
