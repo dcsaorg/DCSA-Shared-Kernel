@@ -36,6 +36,10 @@
 			<artifactId>dcsa-shared-kernel-test-helpers</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!--
+				Intentionally not including dataloader in all as that could have unintended
+				side effects in projects that depends on all.
+		-->
 	</dependencies>
 
 </project>
